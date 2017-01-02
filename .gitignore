@@ -1,0 +1,20 @@
+# project files
+.idea/
+
+# python byte files
+*.pyc
+
+# ignore screenshot not explicitly added
+*.png
+
+# ignore pyinstaller artifacts
+*.spec
+dist/
+build/
+setup.py
+
+# ignore distribution packages
+packages/
+
+# ignore font
+*.ttf

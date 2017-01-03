@@ -34,7 +34,7 @@ class Image(object):
         base = pygame.image.load(path)
         w = base.get_width()
         h = base.get_height()
-        scaled = pygame.transform.scale(base, (w*SCALE, h*SCALE))
+        scaled = pygame.transform.scale(base, (scale(w), scale(h)))
         
         return scaled
     
@@ -56,4 +56,30 @@ class Image(object):
         
     def set_colorkey(self, color=WHITE):
         self.image.set_colorkey(color)
-        
+
+
+class TroopImage(Image):
+
+    def __init__(self, imagename, color, x_off, y_off):
+        Image.__init__(self, imagename=imagename, colorkey=WHITE)
+        self.recolor(DK_GREY, color)
+        self.x_offset = x_off
+        self.y_offset = y_off
+        self.facing = 'left'
+
+    def set_asset_path(self):
+        return SPRITEPATH
+
+    def position(self, (x, y)):
+        self.rect.bottomleft = (x + self.x_offset, y + self.y_offset + (BATTLEGRID_SQUARE_H * .75))
+
+    def change_facing(self):
+        if self.facing == 'left':
+            self.facing = 'right'
+        elif self.facing == 'right':
+            self.facing = 'left'
+        self.flip()
+
+    def flip(self):
+        self.image = pygame.transform.flip(self.image, True, False)
+        # self.x_offset *= -1

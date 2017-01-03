@@ -306,5 +306,3 @@ class TileImage(Image):
     def __init__(self, imagename=None):
         Image.__init__(self, imagename)
         
-    
-    

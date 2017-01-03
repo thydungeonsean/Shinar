@@ -1,15 +1,17 @@
 from ..constants import *
-from ..images.image import Image
+from ..images.image import TroopImage
 
 
 class Troop(object):
     
-    def __init__(self, location, team, type, cohesion, morale, speed, strength, weakness):
+    def __init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness):
         
         self.location = location
         self.coord = self.location.get_coord(self)
+        self.image_pos = (0, 0)
         
         self.team = team
+        self.color = color
         
         self.type = type
         
@@ -21,9 +23,9 @@ class Troop(object):
         
         self.x_offset, self.y_offset = self.set_image_offsets()
         self.image = self.set_image()
-        
+
     def set_image(self):
-        return TroopImage(self.type, RED, self.x_offset, self.y_offset)
+        return TroopImage(self.type, self.color, self.x_offset, self.y_offset)
         
     def set_image_offsets(self):
         return 0, 0
@@ -32,12 +34,16 @@ class Troop(object):
         self.image.draw(surface)
 
     def position(self, (x, y)):
+        self.image_pos = (x, y)
         self.image.position((x, y))
-        
+
+    def change_facing(self):
+        self.image.change_facing()
+
 
 class Infantry(Troop):
     
-    def __init__(self, location, team):
+    def __init__(self, location, team, color):
         
         type = 'infantry'
         
@@ -47,15 +53,15 @@ class Infantry(Troop):
         strength = 'chariot'
         weakness = 'archer'
         
-        Troop.__init__(self, location, team, type, cohesion, morale, speed, strength, weakness)
+        Troop.__init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness)
 
     def set_image_offsets(self):
-        return scale_tuple((-1, -4))
+        return scale_tuple((-1, 0))
         
         
 class Archer(Troop):
     
-    def __init__(self, location, team):
+    def __init__(self, location, team, color):
         
         type = 'archer'
         
@@ -65,15 +71,12 @@ class Archer(Troop):
         strength = 'infantry'
         weakness = 'chariot'
         
-        Troop.__init__(self, location, team, type, cohesion, morale, speed, strength, weakness)
-        
-    def set_image_offsets(self):
-        return scale_tuple((0, -4))
+        Troop.__init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness)
         
         
 class Chariot(Troop):
     
-    def __init__(self, location, team):
+    def __init__(self, location, team, color):
         
         type = 'chariot'
         
@@ -83,23 +86,7 @@ class Chariot(Troop):
         strength = 'archer'
         weakness = 'infantry'
         
-        Troop.__init__(self, location, team, type, cohesion, morale, speed, strength, weakness)
+        Troop.__init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness)
 
     def set_image_offsets(self):
-        return scale_tuple((-2, -8))
-
-        
-class TroopImage(Image):
-    
-    def __init__(self, imagename, color, x_off, y_off):
-        
-        Image.__init__(self, imagename=imagename, colorkey=WHITE)
-        self.recolor(DK_GREY, color)
-        self.x_offset = x_off
-        self.y_offset = y_off
-    
-    def set_asset_path(self):
-        return SPRITEPATH
-
-    def position(self, (x, y)):
-        self.rect.topleft = (x + self.x_offset, y + self.y_offset)
+        return scale_tuple((-2, 0))

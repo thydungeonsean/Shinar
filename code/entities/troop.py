@@ -7,9 +7,10 @@ class Troop(object):
     def __init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness):
         
         self.location = location
-        self.coord = self.location.get_coord(self)
-        self.image_pos = (0, 0)
-        
+        self.coord = (0, 0)
+
+        self.direction = 1
+
         self.team = team
         self.color = color
         
@@ -20,6 +21,8 @@ class Troop(object):
         self.speed = speed
         self.strength = strength
         self.weakness = weakness
+
+        self.state = 'advance'
         
         self.x_offset, self.y_offset = self.set_image_offsets()
         self.image = self.set_image()
@@ -33,12 +36,17 @@ class Troop(object):
     def draw(self, surface):
         self.image.draw(surface)
 
-    def position(self, (x, y)):
-        self.image_pos = (x, y)
+    def position_image(self, (x, y)):
         self.image.position((x, y))
 
     def change_facing(self):
         self.image.change_facing()
+
+    def get_pixel_coord(self, (x, y)):
+        return x * BATTLEGRID_SQUARE_W + BATTLEFIELD_X_MARGIN, y * BATTLEGRID_SQUARE_H
+
+    def move(self, coord):
+        self.coord = coord
 
 
 class Infantry(Troop):

@@ -41,5 +41,6 @@ class Battle(State):
             for i in range(roster.len()):
                 troop = self.right_army.get_troop(type)
                 troop.change_facing()
+                troop.direction = -1
                 row = self.battlefield.get_empty_row('right')
                 row.assign_to_row(troop, 'right')

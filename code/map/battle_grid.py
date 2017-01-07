@@ -23,6 +23,11 @@ class BattleGrid(object):
 
         for y in range(bg.h):
             for x in range(bg.w):
-                tl = (x*bg.square_w+BATTLEFIELD_X_MARGIN, y*bg.square_h+BATTLEFIELD_Y_MARGIN)
+                tl = BattleGrid.get_pixel_coord((x, y))
                 rect.topleft = tl
                 pygame.draw.rect(surface, YELLOW, rect, SCALE)
+
+    @staticmethod
+    def get_pixel_coord((x, y)):
+        bg = BattleGrid
+        return x * bg.square_w + BATTLEFIELD_X_MARGIN, y*bg.square_h+BATTLEFIELD_Y_MARGIN

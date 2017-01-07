@@ -67,7 +67,7 @@ class Army(Grouping):
         else:
             return -1
 
-    def advance(self):
+    def advance(self):  # TODO this was for test - movement will be handled by battle scheduler and action queue
 
         for troop in self.troops:
             x, y = troop.image_pos

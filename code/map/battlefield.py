@@ -2,10 +2,11 @@ from ..constants import *
 from map import Map
 from map_image import MapImageGenerator
 from battle_grid import BattleGrid
-from ..entities.grouping import Grouping
+from row import Row
 from random import randint
 from ..entities.troop import *
 from random import shuffle
+
 
 
 class BattleField(object):
@@ -99,47 +100,3 @@ class BattleField(object):
             if not row.sides[side]:
                 return row
         print 'uh oh!!! no empty rows!'
-
-
-class Row(Grouping):
-    
-    width = BATTLEGRID_W
-    
-    def __init__(self, lane_id, lane_y, field_y):
-        
-        self.lane_id = lane_id
-        
-        self.lane_y = lane_y
-        self.field_y = field_y
-        
-        self.y = self.set_y()
-
-        self.sides = {'left': False, 'right': False}
-
-        Grouping.__init__(self)
-        
-    def get_position(self, troop):
-        return 1
-        
-    def set_y(self):
-        return BATTLEGRID_SQUARE_H * self.field_y + BATTLEFIELD_Y_MARGIN
-
-    def draw(self, surface):
-
-        for item in self.troops:
-            item.draw(surface)
-
-    def get_start_coord(self, side):
-
-        if side == 'left':
-            x = BATTLEFIELD_X_MARGIN
-        elif side == 'right':
-            x = BATTLEFIELD_W - BATTLEFIELD_X_MARGIN - BATTLEGRID_SQUARE_W
-        return x, self.y
-
-    def assign_to_row(self, troop, side):
-        self.add(troop)
-        pos = self.get_start_coord(side)
-        troop.position(pos)
-        self.sides[side] = True
-

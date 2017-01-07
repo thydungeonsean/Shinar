@@ -6,9 +6,8 @@ from code.constants import *
 import code.states.battle as battle
 
 from code.entities.troop import *
-from code.map.battlefield import Row
 from code.entities.army import Army
-
+import code.states.battle_scheduler as bsched
 
 pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = "TRUE"
@@ -19,16 +18,27 @@ blue = Army('b', RIVER_BLUE, 1, 1, 5)
 
 b = battle.Battle('s', red, blue)
 
+BS = bsched.BattleScheduler(b)
+
 clock = pygame.time.Clock()
 
-for i in range(20):
+for i in range(121):
     b.render()
     b.battlefield.grid.draw(screen)
+    BS.run()
 
     pygame.display.update()
-    clock.tick(30)
-    red.advance()
-    blue.advance()
+    clock.tick(60)
+    # x=True
+    # while x:
+    #     key = pygame.event.wait()
+    #     if key.type == KEYDOWN:
+    #         if key.key == K_ESCAPE:
+    #             quit()
+    #         x = False
+    #         clock.tick(60)
+    #red.advance()
+    #blue.advance()
 
 
 pygame.image.save(screen, 's.png')

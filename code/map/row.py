@@ -3,6 +3,7 @@ from ..constants import *
 
 
 class Row(Grouping):
+
     width = BATTLEGRID_W
 
     def __init__(self, lane_id, lane_y, field_y):
@@ -39,6 +40,7 @@ class Row(Grouping):
 
     def assign_to_row(self, troop, side):
         self.add(troop)
+        troop.location = self
         if side == 'left':
             x = 0
         else:

@@ -1,5 +1,7 @@
 from ..constants import *
 from ..map.battle_grid import BattleGrid as bg
+from effect import Arrow
+from random import randint
 
 
 class Action(object):
@@ -102,3 +104,27 @@ class Retreat(Move):
     def instant_effect(self):
         self.actor.move((self.bx, self.by))
         self.actor.change_facing()
+
+
+class Fire(Action):
+
+    def __init__(self, scheduler, actor, target):
+        self.target = target
+
+        Action.__init__(self, scheduler, actor)
+        self.trigger = self.set_trigger()
+
+    def instant_effect(self):
+        self.fire_arrow()
+
+    def fire_arrow(self):
+        effect = Arrow(self.actor.pixel_coord, self.target.pixel_coord)
+        effect.create()
+
+    def perform_action(self):
+        if self.tick == self.trigger:
+            self.fire_arrow()
+
+    def set_trigger(self):
+        trigger = self.end_tick/4 + randint(-3, 3)
+        return trigger

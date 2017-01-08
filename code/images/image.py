@@ -7,7 +7,14 @@ REL = '\\..'
 
 
 class Image(object):
-    
+
+    @classmethod
+    def get_sized_image(cls, w, h):
+        instance = cls()
+        instance.image = pygame.Surface((w, h))
+        instance.rect = instance.set_dims()
+        return instance
+
     def __init__(self, imagename=None, colorkey=None):
     
         self.x_offset = 0
@@ -17,8 +24,12 @@ class Image(object):
         self.image = self.init_image(imagename)
         if colorkey is not None:
             self.set_colorkey(colorkey)
-        self.rect = self.image.get_rect()
-        
+        self.rect = self.set_dims()
+
+    def set_dims(self):
+        rect = self.image.get_rect()
+        return rect
+
     def set_asset_path(self):
         return TILEPATH
         

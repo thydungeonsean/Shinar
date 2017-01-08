@@ -8,7 +8,6 @@ from ..entities.troop import *
 from random import shuffle
 
 
-
 class BattleField(object):
     
     left_w = 3
@@ -43,7 +42,7 @@ class BattleField(object):
         self.grid = BattleGrid()
 
         # tacked on for testing
-        #self.random_troops()
+        # self.random_troops()
 
     # init methods
     def set_lanes_and_rows(self):
@@ -69,7 +68,7 @@ class BattleField(object):
         m_gen = MapImageGenerator.get_instance()
         return m_gen.generate_image(self.map)
         
-    def random_troops(self):
+    def random_troops(self):  #TODO prob don't need this period
         troop_sel = {
                     0: Infantry,
                     1: Archer,
@@ -81,7 +80,7 @@ class BattleField(object):
             row.add(troop)
             x, y = BATTLEFIELD_X_MARGIN, row.y
             # todo built in position algo
-            troop.position((x, y))
+            troop.position_image((x, y))
 
     def draw(self, surface):
         surface.blit(self.map_image, self.map_image_rect)
@@ -100,3 +99,12 @@ class BattleField(object):
             if not row.sides[side]:
                 return row
         print 'uh oh!!! no empty rows!'
+
+    def get_adj_rows(self, i):
+
+        adj = []
+        adj_i = (i-1, i+1)
+        for row_id in adj_i:
+            if row_id in range(BATTLEGRID_H):
+                adj.append(self.rows[row_id])
+        return adj

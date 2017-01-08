@@ -1,12 +1,12 @@
 import os
 import pygame
 from pygame.locals import *
-from code.constants import *
+from source.constants import *
 
-import code.states.battle as battle
+import source.states.battle as battle
 
-from code.entities.troop import *
-from code.entities.army import Army
+from source.entities.troop import *
+from source.entities.army import Army
 
 
 pygame.init()

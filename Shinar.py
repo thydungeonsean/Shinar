@@ -1,4 +1,4 @@
-from code.main import main
+from source.main import main
 import pygame._view  # idosyncracy for py2exe
 import pygame
 import sys

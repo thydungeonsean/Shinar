@@ -39,16 +39,21 @@ class Image(object):
             img = pygame.Surface((TILEW, TILEH))
             img.fill(WHITE)
             return img
-        
-        path = os.path.dirname(__file__) + REL + self.asset_path + imagename + '.png'
-        
-        base = pygame.image.load(path)
+        base = self.load_image(imagename)
         w = base.get_width()
         h = base.get_height()
         scaled = pygame.transform.scale(base, (scale(w), scale(h)))
         
         return scaled
-    
+
+    def load_image(self, imagename):
+        path = os.path.dirname(__file__) + REL + self.asset_path + imagename + '.png'
+        try:
+            return pygame.image.load(path)
+        except:
+            alt_path = os.path.dirname(__file__) + REL + self.asset_path + imagename + '_placeholder.png'
+            return pygame.image.load(alt_path)
+
     def position(self, (x, y)):
     
         self.rect.topleft = ((x*TILEW)+self.x_offset, (y*TILEH)+self.y_offset)

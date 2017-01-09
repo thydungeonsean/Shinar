@@ -4,8 +4,13 @@
 # python byte files
 *.pyc
 
-# ignore screenshot not explicitly added
-*.png
+# ignore sprites to protect Oryx licence
+assets/sprites/infantry.png
+assets/sprites/archer.png
+assets/sprites/chariot.png
+
+# ignore screenshot
+s.png
 
 # ignore pyinstaller artifacts
 *.spec

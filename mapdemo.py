@@ -1,13 +1,9 @@
 import pygame
-from code.map.map_tools import *
+from source.map.map_tools import *
 from pygame.locals import *
-from code.map.map import Map
-from code.map.map_image import MapImageGenerator
-import code.states.battle as battle
-import code.map.battlefield as batfield
+from source.map.map import Map
+from source.map.map_image import MapImageGenerator
 
-b = battle.Battle()
-bf = batfield.BattleField()
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))

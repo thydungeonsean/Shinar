@@ -48,5 +48,5 @@ class Row(Grouping):
         y = self.field_y
         troop.coord = (x, y)
         image_pos = self.get_start_coord(side)
-        troop.position_image(image_pos)
+        #troop.position_image(image_pos)
         self.sides[side] = True

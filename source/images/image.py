@@ -1,6 +1,7 @@
 import pygame
 from ..constants import *
 import os
+from ..map.battle_grid import BattleGrid
 
 
 REL = '\\..'
@@ -50,7 +51,7 @@ class Image(object):
         path = os.path.dirname(__file__) + REL + self.asset_path + imagename + '.png'
         try:
             return pygame.image.load(path)
-        except:
+        except pygame.error:
             alt_path = os.path.dirname(__file__) + REL + self.asset_path + imagename + '_placeholder.png'
             return pygame.image.load(alt_path)
 
@@ -87,7 +88,8 @@ class TroopImage(Image):
         return SPRITEPATH
 
     def position(self, (x, y)):
-        self.rect.bottomleft = (x + self.x_offset, y + self.y_offset + (BATTLEGRID_SQUARE_H * .75))
+        # self.rect.bottomleft = (x + self.x_offset, y + self.y_offset + (BATTLEGRID_SQUARE_H * .75))
+        self.rect.bottomleft = (x + self.x_offset, y + self.y_offset + BATTLEGRID_SQUARE_H)
 
     def change_facing(self):
         if self.facing == 'left':

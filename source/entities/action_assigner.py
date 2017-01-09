@@ -37,7 +37,7 @@ class ActionAssigner(object):
 
         target = self.check_melee_target(troop)
         if target is not None:
-            return Hold(self.scheduler, troop)  # Engage(troop, target)
+            return Engage(self.scheduler, troop, target)  # Engage(troop, target)
 
         if troop.type == 'archer':
             target = self.check_range_target(troop)

@@ -52,8 +52,8 @@ class Arrow(Effect):
     def move_arrow(self):
         ax, ay = self.origin
         bx, by = self.destination
-        x = ax + self.lerp(ax, bx) + BATTLEGRID_SQUARE_W/2
-        y = ay + self.lerp(ay, by) + BATTLEGRID_SQUARE_H/2
+        x = ax + self.lerp(ax, bx) + BATTLEGRID_SQUARE_W/2  # TODO what's goin on here
+        y = ay + self.lerp(ay, by) + BATTLEGRID_SQUARE_H
         self.rect.topleft = (x, y)
 
     def lerp(self, a, b):

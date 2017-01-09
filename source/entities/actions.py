@@ -128,3 +128,26 @@ class Fire(Action):
     def set_trigger(self):
         trigger = self.end_tick/4 + randint(-3, 3)
         return trigger
+
+
+class Engage(Action):
+
+    def __init__(self, scheduler, actor, target):
+
+        self.x_mod = 0
+        self.y_mod = 0
+
+        Action.__init__(self, scheduler, actor)
+        self.triggers = self.set_triggers()
+
+    def set_triggers(self):
+
+        triggers = [randint(0, 8), self.end_tick/2+randint(-5, 5)]
+
+        return triggers
+
+    def perform_action(self):
+
+        if self.tick in self.triggers:
+            x, y = self.actor.image.rect.topleft
+            self.actor.position_image((x+10 , y))

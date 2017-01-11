@@ -23,7 +23,7 @@ clock = pygame.time.Clock()
 
 for i in range(480):
     b.render()
-    b.battlefield.grid.draw(screen)
+    # b.battlefield.grid.draw(screen)
     b.run()
 
     pygame.display.update()

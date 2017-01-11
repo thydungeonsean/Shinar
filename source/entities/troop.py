@@ -48,6 +48,10 @@ class Troop(object):
     def position_image(self, (x, y)):
         self.image.position((x, y))
 
+    def update_pos(self):
+        print self.coord
+        self.image.position(self.coord)
+
     def change_facing(self):
         self.image.change_facing()
 

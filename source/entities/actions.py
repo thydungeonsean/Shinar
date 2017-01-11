@@ -29,8 +29,8 @@ class Action(object):
             self.scheduler.complete_action(self)
 
     def run(self):
-        self.increment_tick()
         self.perform_action()
+        self.increment_tick()
         self.check_for_completion()
 
     def perform_action(self):
@@ -64,11 +64,15 @@ class Move(Action):
         self.actor.move((self.bx, self.by))
 
     def perform_action(self):
-        imgx = self.lerp_x(self.ax, self.bx)
-        imgy = self.lerp_y(self.ay, self.by)
-        x = self.start_x + imgx
-        y = self.start_y + imgy
-        self.actor.position_image((x, y))
+        # imgx = self.lerp_x(self.ax, self.bx)
+        # imgy = self.lerp_y(self.ay, self.by)
+        # x = self.start_x + imgx
+        # y = self.start_y + imgy
+        # self.actor.position_image((x, y))
+        mod_x = self.lerp_x(self.ax, self.bx)
+        mod_y = self.lerp_y(self.ay, self.by)
+        self.actor.image.set_ani_mod((mod_x, mod_y))
+        self.actor.update_pos()
 
     def lerp(self, a, b):
         diff = float(b - a)
@@ -132,22 +136,44 @@ class Fire(Action):
 
 class Engage(Action):
 
+    seq = (2, 3, -2, -2, -1)
+
     def __init__(self, scheduler, actor, target):
 
-        self.x_mod = 0
-        self.y_mod = 0
-
         Action.__init__(self, scheduler, actor)
-        self.triggers = self.set_triggers()
+        self.animation = self.set_animation()
 
-    def set_triggers(self):
+    def set_animation(self):
 
-        triggers = [randint(0, 8), self.end_tick/2+randint(-5, 5)]
+        bumps = self.set_bumps()
 
-        return triggers
+        animation = [0 for i in range(self.end_tick)]
+
+        for bump in bumps:
+            self.add_bump(bump, animation)
+        return animation
+
+    def set_bumps(self):
+
+        if self.actor.type == 'chariot':
+            bumps = [randint(0, self.end_tick-5)]
+        else:
+            bumps = [randint(0, 5), self.end_tick/2+randint(-5, 5)]
+
+        return bumps
+
+    def add_bump(self, bump, animation):
+
+        i = 0
+        for mod in Engage.seq:
+            animation[i+bump] = mod
+            i += 1
+
+    def get_animation_mod(self):
+        mod = self.animation[self.tick] * self.actor.direction
+        return mod
 
     def perform_action(self):
 
-        if self.tick in self.triggers:
-            x, y = self.actor.image.rect.topleft
-            self.actor.position_image((x+10 , y))
+        self.actor.image.set_ani_mod((self.get_animation_mod(), 0))
+        self.actor.update_pos()

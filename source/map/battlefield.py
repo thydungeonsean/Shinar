@@ -78,7 +78,7 @@ class BattleField(object):
             row = self.rows[i]
             troop = troop_sel[randint(0, 2)](row, 'Red')
             row.add(troop)
-            x, y = BATTLEFIELD_X_MARGIN, row.y
+            x, y = 0, row.field_y
             # todo built in position algo
             troop.position_image((x, y))
 

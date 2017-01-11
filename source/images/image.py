@@ -84,12 +84,19 @@ class TroopImage(Image):
         self.y_offset = y_off
         self.facing = 'left'
 
+        self.x_ani_mod = 0
+        self.y_ani_mod = 0
+
     def set_asset_path(self):
         return SPRITEPATH
 
+    def get_pixel_coords(self, (x, y)):
+         return (x * BATTLEGRID_SQUARE_W + self.x_offset + BATTLEFIELD_X_MARGIN + self.x_ani_mod,
+         y * BATTLEGRID_SQUARE_H + self.y_offset + BATTLEFIELD_Y_MARGIN + self.y_ani_mod
+         + (BATTLEGRID_SQUARE_H * .75))
+
     def position(self, (x, y)):
-        # self.rect.bottomleft = (x + self.x_offset, y + self.y_offset + (BATTLEGRID_SQUARE_H * .75))
-        self.rect.bottomleft = (x + self.x_offset, y + self.y_offset + BATTLEGRID_SQUARE_H)
+        self.rect.bottomleft = self.get_pixel_coords((x, y))
 
     def change_facing(self):
         if self.facing == 'left':
@@ -101,3 +108,7 @@ class TroopImage(Image):
     def flip(self):
         self.image = pygame.transform.flip(self.image, True, False)
         # self.x_offset *= -1
+
+    def set_ani_mod(self, (x, y)):
+        self.x_ani_mod = x
+        self.y_ani_mod = y

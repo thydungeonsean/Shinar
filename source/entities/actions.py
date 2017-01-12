@@ -55,21 +55,21 @@ class Move(Action):
         self.bx = bx
         self.by = by
 
-        self.start_x, self.start_y = bg.get_pixel_coord((ax, ay))
-        self.end_x, self.end_y = bg.get_pixel_coord((bx, by))
+        self.coord_mod = self.set_coord_mod()
 
         Action.__init__(self, scheduler, actor)
 
     def instant_effect(self):
         self.actor.move((self.bx, self.by))
 
+    def set_coord_mod(self):
+        start = bg.get_pixel_coord((self.ax, self.ay))
+        end = bg.get_pixel_coord((self.bx, self.by))
+        return start[0] - end[0]
+
     def perform_action(self):
-        # imgx = self.lerp_x(self.ax, self.bx)
-        # imgy = self.lerp_y(self.ay, self.by)
-        # x = self.start_x + imgx
-        # y = self.start_y + imgy
-        # self.actor.position_image((x, y))
-        mod_x = self.lerp_x(self.ax, self.bx)
+
+        mod_x = self.lerp_x(self.ax, self.bx) + self.coord_mod
         mod_y = self.lerp_y(self.ay, self.by)
         self.actor.image.set_ani_mod((mod_x, mod_y))
         self.actor.update_pos()
@@ -136,7 +136,7 @@ class Fire(Action):
 
 class Engage(Action):
 
-    seq = (2, 3, -2, -2, -1)
+    seq = (2, 3, -1, -2, -2)
 
     def __init__(self, scheduler, actor, target):
 

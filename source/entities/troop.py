@@ -19,7 +19,9 @@ class Troop(object):
         self.type = type
         
         self.cohesion = cohesion
+        self.max_cohesion = cohesion
         self.morale = morale
+        self.max_morale = morale
         self.speed = speed
         self.strength = strength
         self.weakness = weakness

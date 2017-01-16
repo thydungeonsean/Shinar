@@ -68,7 +68,7 @@ class BattleScheduler(object):
         troop = action.actor
         self.action_queue.remove(action)
         if troop in self.battle.left_army.troops:
-            self.ready_troops.insert(0, troop)  # left army (attacker) gets intiative priority
+            self.ready_troops.insert(0, troop)  # left army (attacker) gets initiative priority
         else:
             self.ready_troops.append(troop)
 

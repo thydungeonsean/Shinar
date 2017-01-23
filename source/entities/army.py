@@ -66,3 +66,8 @@ class Army(Grouping):
             return 1
         else:
             return -1
+
+    def contains(self, troop):
+        if troop in self.troops:
+            return True
+        return False

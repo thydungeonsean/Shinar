@@ -1,11 +1,11 @@
 import pygame
-from state import State
+from ..states.state import State
 from ..map.battlefield import BattleField
 from ..entities.army import Army
-from random import *
 from ..images.image import Image
 from battle_scheduler import BattleScheduler
 from ..entities.effect import EffectManager
+from engagement import EngagementManager
 
 
 class Battle(State):
@@ -21,6 +21,9 @@ class Battle(State):
         self.left_army.set_side('left')
         self.right_army = right_army
         self.right_army.set_side('right')
+
+        self.engagements = EngagementManager.get_instance()
+        self.engagements.init_battle(self)
 
         self.scheduler = BattleScheduler.get_instance()
         self.scheduler.init_battle(self)

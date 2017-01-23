@@ -1,5 +1,4 @@
 from actions import *
-# from ..states.battle_scheduler import BattleScheduler
 
 
 class ActionAssigner(object):
@@ -10,33 +9,37 @@ class ActionAssigner(object):
     def get_instance(cls):
         if ActionAssigner.instance is None:
             ActionAssigner.instance = cls()
-            return ActionAssigner.instance
-        else:
-            return ActionAssigner.instance
+        return ActionAssigner.instance
 
     def __init__(self):
         self.battle = None
         self.scheduler = None
         self.battle_field = None
+        self.engagement_manager = None
 
     def init_battle(self, battle, scheduler):
         self.scheduler = scheduler
         self.battle = battle
         self.battle_field = battle.battlefield
+        self.engagement_manager = battle.engagements
 
     def get_next_action(self, troop):
 
         if troop.state == 'advance':
-            action = self.advancing(troop)
+            action = self.get_advancing_action(troop)
         elif troop.state == 'flee':
             action = Retreat(self.scheduler, troop)
 
         return action
 
-    def advancing(self, troop):
+    def get_advancing_action(self, troop):
 
         target = self.check_melee_target(troop)
         if target is not None:
+            if target.state == 'advance':
+                # troop.harry(target)
+                print '%s is harrying %s' % (troop, target)
+
             return Engage(self.scheduler, troop, target)  # Engage(troop, target)
 
         if troop.type == 'archer':

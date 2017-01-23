@@ -28,10 +28,12 @@ class Image(object):
         self.rect = self.set_dims()
 
     def set_dims(self):
+
         rect = self.image.get_rect()
         return rect
 
     def set_asset_path(self):
+
         return TILEPATH
         
     def init_image(self, imagename):
@@ -48,6 +50,7 @@ class Image(object):
         return scaled
 
     def load_image(self, imagename):
+
         path = os.path.dirname(__file__) + REL + self.asset_path + imagename + '.png'
         try:
             return pygame.image.load(path)
@@ -64,6 +67,7 @@ class Image(object):
         surface.blit(self.image, self.rect)
         
     def blit(self, image, rect):
+
         self.image.blit(image, rect)
         
     def recolor(self, color_a, color_b):
@@ -72,12 +76,14 @@ class Image(object):
         pix_array.replace(color_a, color_b, 0.01)
         
     def set_colorkey(self, color=WHITE):
+
         self.image.set_colorkey(color)
 
 
 class TroopImage(Image):
 
     def __init__(self, imagename, color, x_off, y_off):
+
         Image.__init__(self, imagename=imagename, colorkey=WHITE)
         self.recolor(DK_GREY, color)
         self.x_offset = x_off
@@ -88,17 +94,21 @@ class TroopImage(Image):
         self.y_ani_mod = 0
 
     def set_asset_path(self):
+
         return SPRITEPATH
 
     def get_pixel_coords(self, (x, y)):
+
          return (x * BATTLEGRID_SQUARE_W + self.x_offset + BATTLEFIELD_X_MARGIN + self.x_ani_mod,
          y * BATTLEGRID_SQUARE_H + self.y_offset + BATTLEFIELD_Y_MARGIN + self.y_ani_mod
          + (BATTLEGRID_SQUARE_H * .75))
 
     def position(self, (x, y)):
+
         self.rect.bottomleft = self.get_pixel_coords((x, y))
 
     def change_facing(self):
+
         if self.facing == 'left':
             self.facing = 'right'
         elif self.facing == 'right':
@@ -106,9 +116,11 @@ class TroopImage(Image):
         self.flip()
 
     def flip(self):
+
         self.image = pygame.transform.flip(self.image, True, False)
         # self.x_offset *= -1
 
     def set_ani_mod(self, (x, y)):
+
         self.x_ani_mod = x
         self.y_ani_mod = y

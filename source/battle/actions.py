@@ -1,11 +1,10 @@
 from ..constants import *
 from ..map.battle_grid import BattleGrid as bg
-from effect import Arrow
+from ..entities.effect import Arrow
 from random import randint
 
 
 class Action(object):
-
     """ Action takes a troop arg as actor to carry out the action"""
 
     def __init__(self, scheduler, actor):
@@ -18,17 +17,26 @@ class Action(object):
         self.instant_effect()
 
     def set_end_tick(self):
+
         speed = self.actor.speed
         return FRAMES_PER_TURN / speed
 
     def increment_tick(self):
+
         self.tick += 1
 
     def check_for_completion(self):
+
         if self.tick >= self.end_tick:
-            self.scheduler.complete_action(self)
+            self.complete()
+
+    def complete(self):
+
+        self.final_effect()
+        self.scheduler.complete_action(self)
 
     def run(self):
+
         self.perform_action()
         self.increment_tick()
         self.check_for_completion()
@@ -37,6 +45,9 @@ class Action(object):
         pass
 
     def instant_effect(self):
+        pass
+
+    def final_effect(self):
         pass
 
 
@@ -60,9 +71,11 @@ class Move(Action):
         Action.__init__(self, scheduler, actor)
 
     def instant_effect(self):
+
         self.actor.move((self.bx, self.by))
 
     def set_coord_mod(self):
+
         start = bg.get_pixel_coord((self.ax, self.ay))
         end = bg.get_pixel_coord((self.bx, self.by))
         return start[0] - end[0]
@@ -75,15 +88,18 @@ class Move(Action):
         self.actor.update_pos()
 
     def lerp(self, a, b):
+
         diff = float(b - a)
         prog = float(self.tick) / float(self.end_tick)
         return diff * prog
 
     def lerp_x(self, a, b):
+
         mod = self.lerp(a, b)
         return int(mod * BATTLEGRID_SQUARE_W)
 
     def lerp_y(self, a, b):
+
         mod = self.lerp(a, b)
         return int(mod * BATTLEGRID_SQUARE_H)
 
@@ -130,7 +146,7 @@ class Fire(Action):
             self.fire_arrow()
 
     def set_trigger(self):
-        trigger = self.end_tick/4 + randint(-3, 3)
+        trigger = self.end_tick / 4 + randint(-3, 3)
         return trigger
 
 
@@ -156,9 +172,9 @@ class Engage(Action):
     def set_bumps(self):
 
         if self.actor.type == 'chariot':
-            bumps = [randint(0, self.end_tick-5)]
+            bumps = [randint(0, self.end_tick - 5)]
         else:
-            bumps = [randint(0, 5), self.end_tick/2+randint(-5, 5)]
+            bumps = [randint(0, 5), self.end_tick / 2 + randint(-5, 5)]
 
         return bumps
 
@@ -166,7 +182,7 @@ class Engage(Action):
 
         i = 0
         for mod in Engage.seq:
-            animation[i+bump] = mod
+            animation[i + bump] = mod
             i += 1
 
     def get_animation_mod(self):
@@ -177,3 +193,4 @@ class Engage(Action):
 
         self.actor.image.set_ani_mod((self.get_animation_mod(), 0))
         self.actor.update_pos()
+

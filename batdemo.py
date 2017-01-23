@@ -3,7 +3,7 @@ import pygame
 from pygame.locals import *
 from source.constants import *
 
-import source.states.battle as battle
+import source.battle.battle as battle
 
 from source.entities.troop import *
 from source.entities.army import Army
@@ -13,7 +13,7 @@ pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = "TRUE"
 screen = pygame.display.set_mode((SCREENW, SCREENH))
 
-red = Army('a', RED, 4, 0, 6)
+red = Army('a', RED, 2, 0, 3)
 blue = Army('b', YELLOW, 0, 10, 0)
 
 b = battle.Battle('s', red, blue)
@@ -21,7 +21,7 @@ b = battle.Battle('s', red, blue)
 clock = pygame.time.Clock()
 
 
-for i in range(240):
+for i in range(480):
     b.render()
     # b.battlefield.grid.draw(screen)
     b.run()

@@ -62,6 +62,9 @@ class Troop(object):
     def move(self, coord):
         self.coord = coord
 
+    def change_state(self, state):
+        self.state = state
+
 
 class Infantry(Troop):
 

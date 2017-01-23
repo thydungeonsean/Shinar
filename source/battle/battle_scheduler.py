@@ -1,7 +1,5 @@
 from ..constants import *
-from ..entities.action_assigner import ActionAssigner
-from ..entities.actions import *
-from random import *
+from action_assigner import ActionAssigner
 
 
 class BattleScheduler(object):
@@ -12,9 +10,8 @@ class BattleScheduler(object):
     def get_instance(cls):
         if BattleScheduler.instance is None:
             BattleScheduler.instance = cls()
-            return BattleScheduler.instance
-        else:
-            return BattleScheduler.instance
+
+        return BattleScheduler.instance
 
     def __init__(self):
 
@@ -45,16 +42,16 @@ class BattleScheduler(object):
         self.run_troop_actions()
         self.increment_tick()
         if self.tick >= self.end_tick:
-            pass
-            # print 'end of turn'
+            print 'end of turn - bat sched'
+            self.tick = 0
 
     def increment_tick(self):
+
         self.tick += 1
 
     def set_troop_actions(self):
 
         for troop in self.ready_troops:
-            # new = Advance(self, troop)
             new = self.action_assigner.get_next_action(troop)
             self.action_queue.append(new)
         del self.ready_troops[:]
@@ -65,10 +62,10 @@ class BattleScheduler(object):
             action.run()
 
     def complete_action(self, action):
+
         troop = action.actor
         self.action_queue.remove(action)
         if troop in self.battle.left_army.troops:
             self.ready_troops.insert(0, troop)  # left army (attacker) gets initiative priority
         else:
             self.ready_troops.append(troop)
-

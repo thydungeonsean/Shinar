@@ -29,6 +29,8 @@ class EngagementManager(object):
     def initiate_engagement(self, attacker, defender):
 
         new_engagement = Engagement(attacker, defender)
+        attacker.change_state('engage')
+        defender.change_state('engage')
         self.engagements.append(new_engagement)
 
 

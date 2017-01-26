@@ -36,9 +36,13 @@ class ActionAssigner(object):
 
         target = self.check_melee_target(troop)
         if target is not None:
-            if target.state == 'advance':
+            if target.state in ('advance', 'flee', 'rout'):
                 # troop.harry(target)
+                troop.change_state('harry')
                 print '%s is harrying %s' % (troop, target)
+            else:
+                # troop.engage(target)
+                troop.change_state('engage')
 
             return Engage(self.scheduler, troop, target)  # Engage(troop, target)
 

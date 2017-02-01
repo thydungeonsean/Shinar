@@ -1,5 +1,6 @@
 from ..constants import *
 from action_assigner import ActionAssigner
+from engagement import EngagementManager
 
 
 class BattleScheduler(object):
@@ -18,9 +19,12 @@ class BattleScheduler(object):
         self.battle = None
 
         self.action_assigner = None
+        self.engagements = None
 
         self.tick = 0
         self.end_tick = FRAMES_PER_TURN
+
+        self.phase = 'action'
 
         self.ready_troops = []
         self.action_queue = []
@@ -30,6 +34,7 @@ class BattleScheduler(object):
         self.battle = battle
         self.action_assigner = ActionAssigner.get_instance()
         self.action_assigner.init_battle(self.battle, self)
+        self.engagements = EngagementManager.get_instance()
 
         for troop in self.battle.left_army.troops:
             self.ready_troops.append(troop)
@@ -37,17 +42,37 @@ class BattleScheduler(object):
             self.ready_troops.append(troop)
 
     def run(self):
+        if self.phase == 'action':
+            self.run_action_phase()
+        elif self.phase == 'engagement':
+            self.run_engage_phase()
+        elif self.phase == 'aftermath':
+            self.run_aftermath_phase()
 
+    def run_action_phase(self):
         self.set_troop_actions()
         self.run_troop_actions()
         self.increment_tick()
         if self.tick >= self.end_tick:
-            print 'end of turn - bat sched'
-            self.tick = 0
+            self.end_action_phase()
 
     def increment_tick(self):
 
         self.tick += 1
+
+    def end_action_phase(self):
+        print 'end of actions - bat sched'
+        self.tick = 0
+        self.determine_next_phase()
+
+    def determine_next_phase(self):
+        if not self.engagements.engagements:
+            self.engage_all()
+
+        if self.engagements.engagements:
+            self.phase = 'engagement'
+        else:
+            self.end_turn()
 
     def set_troop_actions(self):
 
@@ -69,3 +94,26 @@ class BattleScheduler(object):
             self.ready_troops.insert(0, troop)  # left army (attacker) gets initiative priority
         else:
             self.ready_troops.append(troop)
+
+    def run_engage_phase(self):
+
+        self.engagements.resolve_engagements()
+
+        self.end_engage_phase()
+
+    def end_engage_phase(self):
+        self.phase = 'aftermath'
+
+    def engage_all(self):
+        for troop in self.battle.left_army.troops:
+            if troop.state not in ('flee', 'rout'):
+                target = self.action_assigner.check_melee_target(troop)
+                if target is not None:
+                    # TODO need to find way to get supports to work here
+                    self.engagements.initiate_engagement(troop, target)
+
+    def run_aftermath_phase(self):
+        self.end_turn()
+
+    def end_turn(self):
+        self.phase = 'action'

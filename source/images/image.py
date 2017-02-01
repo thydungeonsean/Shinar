@@ -107,13 +107,11 @@ class TroopImage(Image):
 
         self.rect.bottomleft = self.get_pixel_coords((x, y))
 
-    def change_facing(self):
+    def change_facing(self, new_facing):
 
-        if self.facing == 'left':
-            self.facing = 'right'
-        elif self.facing == 'right':
-            self.facing = 'left'
-        self.flip()
+        if self.facing != new_facing:
+            self.facing = new_facing
+            self.flip()
 
     def flip(self):
 

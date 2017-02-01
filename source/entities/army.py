@@ -14,7 +14,6 @@ class Army(Grouping):
         self.team = team
         self.color = color
         self.side = None
-        self.direction = 1
 
         Grouping.__init__(self)
 
@@ -59,13 +58,8 @@ class Army(Grouping):
 
     def set_side(self, side):
         self.side = side
-        self.direction = self.set_direction(side)
-
-    def set_direction(self, side):
-        if side == 'left':
-            return 1
-        else:
-            return -1
+        for troop in self.troops:
+            troop.set_side(self.side)
 
     def contains(self, troop):
         if troop in self.troops:

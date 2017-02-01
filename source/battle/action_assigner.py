@@ -15,48 +15,13 @@ class ActionAssigner(object):
         self.battle = None
         self.scheduler = None
         self.battle_field = None
-        self.engagement_manager = None
+        self.engagements = None
 
     def init_battle(self, battle, scheduler):
         self.scheduler = scheduler
         self.battle = battle
         self.battle_field = battle.battlefield
-        self.engagement_manager = battle.engagements
-
-    def get_next_action(self, troop):
-
-        if troop.state == 'advance':
-            action = self.get_advancing_action(troop)
-        elif troop.state == 'flee':
-            action = Retreat(self.scheduler, troop)
-
-        return action
-
-    def get_advancing_action(self, troop):
-
-        target = self.check_melee_target(troop)
-        if target is not None:
-            if target.state in ('advance', 'flee', 'rout'):
-                # troop.harry(target)
-                troop.change_state('harry')
-                print '%s is harrying %s' % (troop, target)
-            else:
-                # troop.engage(target)
-                troop.change_state('engage')
-
-            return Engage(self.scheduler, troop, target)  # Engage(troop, target)
-
-        if troop.type == 'archer':
-            target = self.check_range_target(troop)
-            if target is not None:
-                return Fire(self.scheduler, troop, target)
-
-        locked = self.check_if_locked(troop)
-        if locked:
-            return Hold(self.scheduler, troop)
-
-        # free to advance
-        return Advance(self.scheduler, troop)
+        self.engagements = battle.engagements
 
     def check_melee_target(self, troop):
         row = troop.location
@@ -81,7 +46,7 @@ class ActionAssigner(object):
         return None
 
     def get_impeding_coord(self, troop, row):
-        d = troop.direction
+        d = troop.dir_mod
         cx, cy = troop.coord
         ry = row.field_y
         return cx + d, ry
@@ -98,3 +63,76 @@ class ActionAssigner(object):
                     return True
 
         return False
+
+    def get_next_action(self, troop):
+
+        if troop.needs_check:
+            troop.morale_check()
+
+        if troop.state in ('advance', 'harry', 'fire'):
+            action = self.get_advancing_action(troop)
+        elif troop.state == 'support':
+            action = Hold(self.scheduler, troop)
+        elif troop.state == 'engage':
+            action = self.continue_melee(troop)
+        elif troop.state == 'hold':
+            action = Hold(self.scheduler, troop)
+        elif troop.state == 'flee':
+            action = Retreat(self.scheduler, troop)
+        elif troop.state == 'rout':
+            action = Retreat(self.scheduler, troop)
+
+        return action
+
+    def get_melee_action(self, troop):
+
+        target = self.check_melee_target(troop)
+        if target is not None:
+            if target.state in ('advance', 'flee', 'rout'):
+                troop.change_state('harry')
+                troop.harry(target)
+                print '%s is harrying %s' % (troop, target)
+            elif target.state == 'fire':
+                self.engagements.initiate_engagement(troop, target)
+                print 'charging firing troop'
+            elif target.state == 'support':
+                self.engagements.initiate_engagement(troop, target)
+                print 'breaking support'
+            else:
+                self.engagements.initiate_engagement(troop, target)
+
+            return Melee(self.scheduler, troop, target)
+        else:
+            return None
+
+    def get_ranged_action(self, troop):
+
+        target = self.check_range_target(troop)
+        if target is not None:
+            troop.change_state('fire')
+            troop.fire(target)
+            return Fire(self.scheduler, troop, target)
+        return None
+
+    def continue_melee(self, troop):
+
+        target = self.engagements.get_opposing(troop)
+        return Melee(self.scheduler, troop, target)
+
+    def get_advancing_action(self, troop):
+
+        melee = self.get_melee_action(troop)
+        if melee is not None:
+            return melee
+
+        if troop.type == 'archer':
+            ranged = self.get_ranged_action(troop)
+            if ranged is not None:
+                return ranged
+
+        locked = self.check_if_locked(troop)
+        if locked:
+            return Hold(self.scheduler, troop)
+
+        # free to advance
+        return Advance(self.scheduler, troop)

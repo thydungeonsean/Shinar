@@ -27,6 +27,7 @@ class Battle(State):
 
         self.scheduler = BattleScheduler.get_instance()
         self.scheduler.init_battle(self)
+        self.turn_ready = True
 
         self.effects = EffectManager.get_instance()
 
@@ -59,7 +60,6 @@ class Battle(State):
             roster = self.left_army.stacks[type]
             for i in range(roster.len()):
                 troop = self.left_army.get_troop(type)
-                troop.set_side('left')
                 row = self.battlefield.get_empty_row('left')
                 row.assign_to_row(troop, 'left')
 
@@ -67,9 +67,6 @@ class Battle(State):
             roster = self.right_army.stacks[type]
             for i in range(roster.len()):
                 troop = self.right_army.get_troop(type)
-                troop.set_side('right')
-                troop.change_facing()
-                troop.direction = -1
                 row = self.battlefield.get_empty_row('right')
                 row.assign_to_row(troop, 'right')
 

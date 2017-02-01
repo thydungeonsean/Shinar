@@ -107,23 +107,36 @@ class Move(Action):
 class Advance(Move):
 
     def __init__(self, scheduler, actor):
+
+        actor.advance()
         ax, ay = actor.coord
-        bx = ax + actor.direction
-        by = ay
-        Move.__init__(self, scheduler, actor, (ax, ay), (bx, by))
-
-
-class Retreat(Move):
-
-    def __init__(self, scheduler, actor):
-        ax, ay = actor.coord
-        bx = ax - actor.direction
+        bx = ax + actor.dir_mod
         by = ay
         Move.__init__(self, scheduler, actor, (ax, ay), (bx, by))
 
     def instant_effect(self):
         self.actor.move((self.bx, self.by))
-        self.actor.change_facing()
+
+
+class Retreat(Move):
+
+    def __init__(self, scheduler, actor):
+        actor.retreat()
+        ax, ay = actor.coord
+        bx = ax + actor.dir_mod
+        by = ay
+        Move.__init__(self, scheduler, actor, (ax, ay), (bx, by))
+
+    def instant_effect(self):
+        # TODO move the .move() call to final effect, and modify the set_ani_mod call in the constructor to
+        # reflect this so the coord does not change until the unit has retreated a square
+        self.actor.move((self.bx, self.by))
+        pass
+
+    def final_effect(self):
+        pass
+        # self.actor.move((self.bx, self.by))
+        self.actor.decrement_retreat()
 
 
 class Fire(Action):
@@ -150,7 +163,7 @@ class Fire(Action):
         return trigger
 
 
-class Engage(Action):
+class Melee(Action):
 
     seq = (2, 3, -1, -2, -2)
 
@@ -181,16 +194,17 @@ class Engage(Action):
     def add_bump(self, bump, animation):
 
         i = 0
-        for mod in Engage.seq:
+        for mod in Melee.seq:
             animation[i + bump] = mod
             i += 1
 
     def get_animation_mod(self):
-        mod = self.animation[self.tick] * self.actor.direction
+        mod = self.animation[self.tick] * self.actor.dir_mod
         return mod
 
     def perform_action(self):
 
+        # TODO need diagonal bumps
         self.actor.image.set_ani_mod((self.get_animation_mod(), 0))
         self.actor.update_pos()
 

@@ -46,7 +46,8 @@ class ActionAssigner(object):
         return None
 
     def get_impeding_coord(self, troop, row):
-        d = troop.dir_mod
+        #d = troop.dir_mod # TODO, this fix might not work
+        d = troop.advance_dir_mod
         cx, cy = troop.coord
         ry = row.field_y
         return cx + d, ry
@@ -91,13 +92,14 @@ class ActionAssigner(object):
             if target.state in ('advance', 'flee', 'rout'):
                 troop.change_state('harry')
                 troop.harry(target)
-                print '%s is harrying %s' % (troop, target)
             elif target.state == 'fire':
                 self.engagements.initiate_engagement(troop, target)
-                print 'charging firing troop'
             elif target.state == 'support':
                 self.engagements.initiate_engagement(troop, target)
-                print 'breaking support'
+                print 'breaking support - action assigner'
+            elif target.state == 'harry':
+                self.engagements.initiate_engagement(troop, target)
+                print 'break harry'
             else:
                 self.engagements.initiate_engagement(troop, target)
 
@@ -136,3 +138,28 @@ class ActionAssigner(object):
 
         # free to advance
         return Advance(self.scheduler, troop)
+
+    def get_engagement_melees(self, e):
+
+        actions = [EngagementMelee(self.scheduler, e.attacker, e.defender),
+                   EngagementMelee(self.scheduler, e.defender, e.attacker)]
+
+        return actions
+
+    def get_aftermath_actions(self):
+
+        retreating = []
+        for troop in self.battle.left_army.troops:  # TODO make it so it's only fresh retreats
+            if troop.state in ('rout', 'flee'):
+                retreating.append(troop)
+        for troop in self.battle.right_army.troops:
+            if troop.state in ('rout', 'flee'):
+                retreating.append(troop)
+
+        actions = []
+
+        for troop in retreating:
+            retreat = Retreat(self.scheduler, troop)
+            actions.append(retreat)
+
+        return actions

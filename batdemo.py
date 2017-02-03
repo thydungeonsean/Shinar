@@ -13,17 +13,17 @@ pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = "TRUE"
 screen = pygame.display.set_mode((SCREENW, SCREENH))
 
-red = Army('a', RED, 7, 0, 0)
-blue = Army('b', YELLOW, 0, 0, 7)
+red = Army('a', RED, 1, 0, 0)
+blue = Army('b', YELLOW, 0, 0, 1)
 
 b = battle.Battle('s', red, blue)
 
 clock = pygame.time.Clock()
 
 
-for i in range(480):
+for i in range(720):
     b.render()
-    # b.battlefield.grid.draw(screen)
+    b.battlefield.grid.draw(screen)
 
     b.run()
 

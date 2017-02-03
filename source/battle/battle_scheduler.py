@@ -29,6 +29,8 @@ class BattleScheduler(object):
         self.ready_troops = []
         self.action_queue = []
 
+        self.phase_count = 0
+
     def init_battle(self, battle):
 
         self.battle = battle
@@ -71,6 +73,7 @@ class BattleScheduler(object):
 
         if self.engagements.engagements:
             self.phase = 'engagement'
+            self.assign_engagement_actions()
         else:
             self.end_turn()
 
@@ -97,12 +100,22 @@ class BattleScheduler(object):
 
     def run_engage_phase(self):
 
+        # if self.action_queue:
+        #     for action in self.action_queue[:]:
+        #         action.run()
+        # else:
+        #     self.resolve_engagements()
+        self.resolve_engagements()
+
+    def resolve_engagements(self):
+
         self.engagements.resolve_engagements()
 
         self.end_engage_phase()
 
     def end_engage_phase(self):
         self.phase = 'aftermath'
+        self.assign_aftermath_actions()
 
     def engage_all(self):
         for troop in self.battle.left_army.troops:
@@ -112,8 +125,24 @@ class BattleScheduler(object):
                     # TODO need to find way to get supports to work here
                     self.engagements.initiate_engagement(troop, target)
 
+    def assign_engagement_actions(self):
+
+        for engagement in self.engagements.engagements:
+            actions = self.action_assigner.get_engagement_melees(engagement)
+            self.action_queue.extend(actions)
+
+    def assign_aftermath_actions(self):
+
+        actions = self.action_assigner.get_aftermath_actions()
+        self.action_queue.extend(actions)
+
     def run_aftermath_phase(self):
-        self.end_turn()
+
+        if self.action_queue:
+            for action in self.action_queue[:]:
+                action.run()
+        else:
+            self.end_turn()
 
     def end_turn(self):
         self.phase = 'action'

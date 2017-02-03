@@ -73,6 +73,8 @@ class Move(Action):
     def instant_effect(self):
 
         self.actor.move((self.bx, self.by))
+        print self.actor.tag + ' moves to ' + str((self.bx, self.by))
+        print self.actor.state
 
     def set_coord_mod(self):
 
@@ -114,9 +116,6 @@ class Advance(Move):
         by = ay
         Move.__init__(self, scheduler, actor, (ax, ay), (bx, by))
 
-    def instant_effect(self):
-        self.actor.move((self.bx, self.by))
-
 
 class Retreat(Move):
 
@@ -131,6 +130,8 @@ class Retreat(Move):
         # TODO move the .move() call to final effect, and modify the set_ani_mod call in the constructor to
         # reflect this so the coord does not change until the unit has retreated a square
         self.actor.move((self.bx, self.by))
+        print self.actor.tag + ' retreats to ' + str((self.bx, self.by))
+        print self.actor.state
         pass
 
     def final_effect(self):
@@ -208,3 +209,18 @@ class Melee(Action):
         self.actor.image.set_ani_mod((self.get_animation_mod(), 0))
         self.actor.update_pos()
 
+
+class EngagementMelee(Melee):
+
+    def __init__(self, scheduler, actor, target):
+
+        Melee.__init__(self, scheduler, actor, target)
+
+    def set_end_tick(self):
+
+        speed = 2
+        return FRAMES_PER_TURN / speed
+
+    def set_bumps(self):
+
+        return [randint(0, 5), self.end_tick / 2 + randint(-5, 5)]

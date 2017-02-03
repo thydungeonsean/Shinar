@@ -31,7 +31,8 @@ class Battle(State):
 
         self.effects = EffectManager.get_instance()
 
-        self.autoassign()
+        #self.autoassign()
+        self.assign_troops()
 
     def set_battle_view(self):
         w = self.battlefield.map_image_rect.w
@@ -69,6 +70,16 @@ class Battle(State):
                 troop = self.right_army.get_troop(type)
                 row = self.battlefield.get_empty_row('right')
                 row.assign_to_row(troop, 'right')
+
+    # testing
+    def assign_troops(self):
+
+        t = self.left_army.get_troop('infantry')
+        row = self.battlefield.rows[0]
+        row.assign_to_row(t, 'left')
+        t = self.right_army.get_troop('chariot')
+        row = self.battlefield.rows[0]
+        row.assign_to_row(t, 'right')
 
     def run(self):
         self.scheduler.run()

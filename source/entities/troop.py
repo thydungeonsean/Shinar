@@ -4,7 +4,9 @@ from random import shuffle, randint
 
 
 class Troop(object):
-    
+
+    count = 0
+
     def __init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness):
         
         self.location = location
@@ -65,6 +67,12 @@ class Troop(object):
             return 'left'
         else:
             return 'right'
+
+    @classmethod
+    def set_tag(cls, self):
+        tag = self.type + str(cls.count)
+        cls.count += 1
+        return tag
 
     def set_side(self, side):
         self.side = side
@@ -133,6 +141,7 @@ class Troop(object):
         self.retreat_count -= 1
         if self.retreat_count <= 0:
             self.change_state('advance')
+            self.advance()
 
     def hit(self, target):
 
@@ -179,9 +188,9 @@ class Troop(object):
         check = randint(1, 10)
         if check > (self.morale - self.break_points):
             # morale failure
-            print 'margin of retreat'
             margin = check - (self.morale - self.break_points)
-            print margin
+            margin = 1 # TODO
+            print self.tag + ' retreat count ' + str(margin)
             self.set_retreat_count(margin)
             self.breaks()
             return True
@@ -203,6 +212,8 @@ class Infantry(Troop):
     str = 'chariot'
     weak = 'archer'
 
+    count = 0
+
     def __init__(self, location, team, color):
         
         type = 'infantry'
@@ -215,6 +226,8 @@ class Infantry(Troop):
         
         Troop.__init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness)
 
+        self.tag = Infantry.set_tag(self)
+
     def set_image_offsets(self):
         return scale_tuple((-1, 0))
         
@@ -226,6 +239,8 @@ class Archer(Troop):
     speed = 3
     str = 'infantry'
     weak = 'archer'
+
+    count = 0
 
     def __init__(self, location, team, color):
         
@@ -240,6 +255,8 @@ class Archer(Troop):
         self.max_fire_range = 3
 
         Troop.__init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness)
+
+        self.tag = Archer.set_tag(self)
 
     def get_fire_range(self):
 
@@ -285,6 +302,8 @@ class Chariot(Troop):
     str = 'archer'
     weak = 'infantry'
 
+    count = 0
+
     def __init__(self, location, team, color):
         
         type = 'chariot'
@@ -296,6 +315,8 @@ class Chariot(Troop):
         weakness = Chariot.weak
         
         Troop.__init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness)
+
+        self.tag = Chariot.set_tag(self)
 
     def set_image_offsets(self):
         return scale_tuple((-2, 0))

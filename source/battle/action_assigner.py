@@ -23,6 +23,7 @@ class ActionAssigner(object):
         self.battle_field = battle.battlefield
         self.engagements = battle.engagements
 
+    # tools
     def check_melee_target(self, troop):
         row = troop.location
         target_coord = self.get_impeding_coord(troop, row)
@@ -65,6 +66,7 @@ class ActionAssigner(object):
 
         return False
 
+    # Action Phase Actions
     def get_next_action(self, troop):
 
         if troop.needs_check:
@@ -139,6 +141,7 @@ class ActionAssigner(object):
         # free to advance
         return Advance(self.scheduler, troop)
 
+    # Engagement Phase Actions
     def get_engagement_melees(self, e):
 
         actions = [EngagementMelee(self.scheduler, e.attacker, e.defender),
@@ -146,6 +149,7 @@ class ActionAssigner(object):
 
         return actions
 
+    # Aftermath Phase Actions
     def get_aftermath_actions(self):
 
         retreating = []

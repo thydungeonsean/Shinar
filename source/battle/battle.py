@@ -31,8 +31,8 @@ class Battle(State):
 
         self.effects = EffectManager.get_instance()
 
-        #self.autoassign()
-        self.assign_troops()
+        self.autoassign()
+        #self.assign_troops()
 
     def set_battle_view(self):
         w = self.battlefield.map_image_rect.w

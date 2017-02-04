@@ -140,6 +140,17 @@ class Retreat(Move):
         self.actor.decrement_retreat()
 
 
+class AftermathRetreat(Retreat):
+
+    def __init__(self, scheduler, actor):
+        Retreat.__init__(self, scheduler, actor)
+
+    def complete(self):
+
+        self.final_effect()
+        self.scheduler.complete_action(self, ready=False)
+
+
 class Fire(Action):
 
     def __init__(self, scheduler, actor, target):
@@ -224,3 +235,8 @@ class EngagementMelee(Melee):
     def set_bumps(self):
 
         return [randint(0, 5), self.end_tick / 2 + randint(-5, 5)]
+
+    def complete(self):
+
+        self.final_effect()
+        self.scheduler.complete_action(self, ready=False)

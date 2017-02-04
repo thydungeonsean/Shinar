@@ -13,8 +13,8 @@ pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = "TRUE"
 screen = pygame.display.set_mode((SCREENW, SCREENH))
 
-red = Army('a', RED, 1, 0, 0)
-blue = Army('b', YELLOW, 0, 0, 1)
+red = Army('a', RED, 10, 0, 0)
+blue = Army('b', YELLOW, 1, 2, 7)
 
 b = battle.Battle('s', red, blue)
 

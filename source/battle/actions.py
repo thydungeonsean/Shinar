@@ -111,7 +111,7 @@ class Advance(Move):
     def __init__(self, scheduler, actor):
 
         actor.advance()
-        ax, ay = actor.coord
+        ax, ay = actor.coord.get
         bx = ax + actor.dir_mod
         by = ay
         Move.__init__(self, scheduler, actor, (ax, ay), (bx, by))
@@ -121,7 +121,7 @@ class Retreat(Move):
 
     def __init__(self, scheduler, actor):
         actor.retreat()
-        ax, ay = actor.coord
+        ax, ay = actor.coord.get
         bx = ax + actor.dir_mod
         by = ay
         Move.__init__(self, scheduler, actor, (ax, ay), (bx, by))

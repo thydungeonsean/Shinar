@@ -5,7 +5,7 @@ from ..entities.army import Army
 from ..images.image import Image
 from battle_scheduler import BattleScheduler
 from ..entities.effect import EffectManager
-from engagement import EngagementManager
+from engagement_manager import EngagementManager
 
 
 class Battle(State):

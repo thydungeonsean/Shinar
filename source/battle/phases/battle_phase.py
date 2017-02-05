@@ -3,7 +3,7 @@
 class BattlePhase(object):
 
     def __init__(self, owner, name):
-        self.owner =  owner  # battle scheduler ref
+        self.owner = owner  # battle scheduler ref
         self.name = name
 
     def run(self):

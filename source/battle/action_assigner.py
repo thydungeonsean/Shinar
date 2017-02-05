@@ -28,7 +28,7 @@ class ActionAssigner(object):
         row = troop.location
         target_coord = self.get_impeding_coord(troop, row)
         for t in row.troops:
-            if t.coord == target_coord and t.side != troop.side:
+            if t.coord.get == target_coord and t.side != troop.side:
                 return t
         return None
 
@@ -37,19 +37,19 @@ class ActionAssigner(object):
         fire_range_set = set(fire_range)
         in_range = {}
         for t in self.battle.get_opposing_army(troop).troops:
-            if t.coord in fire_range_set:
-                in_range[t.coord] = t
+            if t.coord.get in fire_range_set:
+                in_range[t.coord.get] = t
         for coord in fire_range:
             try:
                 return in_range[coord]
             except KeyError:
-                pass
+                print 'issue - action assigner'
         return None
 
     def get_impeding_coord(self, troop, row):
         #d = troop.dir_mod # TODO, this fix might not work
         d = troop.advance_dir_mod
-        cx, cy = troop.coord
+        cx, cy = troop.coord.get
         ry = row.field_y
         return cx + d, ry
 
@@ -150,20 +150,12 @@ class ActionAssigner(object):
         return actions
 
     # Aftermath Phase Actions
-    def get_aftermath_actions(self):
-
-        retreating = []
-        for troop in self.battle.left_army.troops:  # TODO make it so it's only fresh retreats
-            if troop.state in ('rout', 'flee'):
-                retreating.append(troop)
-        for troop in self.battle.right_army.troops:
-            if troop.state in ('rout', 'flee'):
-                retreating.append(troop)
+    def get_aftermath_actions(self, retreats):
 
         actions = []
 
-        for troop in retreating:
-            retreat = Retreat(self.scheduler, troop)
+        for troop in retreats:
+            retreat = AftermathRetreat(self.scheduler, troop)
             actions.append(retreat)
 
         return actions

@@ -1,5 +1,6 @@
 from ..constants import *
 from ..images.image import TroopImage
+from coord import Coord
 from random import shuffle, randint
 
 
@@ -10,7 +11,7 @@ class Troop(object):
     def __init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness):
         
         self.location = location
-        self.coord = (0, 0)
+        self.coord = Coord() # TODO
 
         self.side = None
         self.dir_mod = 1
@@ -19,7 +20,6 @@ class Troop(object):
         self.color = color
         
         self.type = type
-        
         self.cohesion = cohesion
         self.max_cohesion = cohesion
         self.morale = morale
@@ -39,7 +39,7 @@ class Troop(object):
 
     @property
     def pixel_coord(self):
-        return self.get_pixel_coord(self.coord)
+        return self.get_pixel_coord(self.coord.get)
 
     def set_image(self):
         return TroopImage(self.type, self.color, self.x_offset, self.y_offset)
@@ -91,11 +91,11 @@ class Troop(object):
     def draw(self, surface):
         self.image.draw(surface)
 
-    def position_image(self, (x, y)):
+    def position_image(self, (x, y)):  # TODO here is where coords interact with troop image
         self.image.position((x, y))
 
     def update_pos(self):
-        self.image.position(self.coord)
+        self.image.position(self.coord.get)
 
     def change_facing(self, facing):
         self.image.change_facing(facing)
@@ -111,8 +111,8 @@ class Troop(object):
     def get_pixel_coord(self, (x, y)):
         return x * BATTLEGRID_SQUARE_W + BATTLEFIELD_X_MARGIN, y * BATTLEGRID_SQUARE_H
 
-    def move(self, coord):
-        self.coord = coord
+    def move(self, (x, y)):
+        self.coord.set((x, y))
 
     def change_state(self, state):
         self.state = state
@@ -135,7 +135,8 @@ class Troop(object):
         self.break_points = 0
 
     def set_retreat_count(self, margin):
-        self.retreat_count = (margin + 1) / 2
+        # self.retreat_count = (margin + 1) / 2
+        self.retreat_count = margin
 
     def decrement_retreat(self):
         self.retreat_count -= 1
@@ -189,7 +190,6 @@ class Troop(object):
         if check > (self.morale - self.break_points):
             # morale failure
             margin = check - (self.morale - self.break_points)
-            margin = 1 # TODO
             print self.tag + ' retreat count ' + str(margin)
             self.set_retreat_count(margin)
             self.breaks()
@@ -260,7 +260,7 @@ class Archer(Troop):
 
     def get_fire_range(self):
 
-        base_y = self.coord[1]
+        base_y = self.coord.y
         fire_range = []
         fire_range.extend(self.get_fire_row(base_y, self.max_fire_range))
         for i in range(2):
@@ -273,7 +273,7 @@ class Archer(Troop):
 
     def get_fire_row(self, y, f_range):
         row = []
-        x = self.coord[0]
+        x = self.coord.x
         s = self.dir_mod
         e = f_range * s + s
         for x_mod in range(s, e, s):

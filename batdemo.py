@@ -13,30 +13,35 @@ pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = "TRUE"
 screen = pygame.display.set_mode((SCREENW, SCREENH))
 
-red = Army('a', RED, 10, 0, 0)
-blue = Army('b', YELLOW, 1, 2, 7)
+red = Army('a', RED, 3, 5, 2)
+blue = Army('b', YELLOW, 4, 4, 0)
 
 b = battle.Battle('s', red, blue)
 
 clock = pygame.time.Clock()
 
 
-for i in range(720):
+def handle_input(phase):
+
+    for event in pygame.event.get():
+        if event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                exit()
+            else:
+                phase.end_phase()
+
+
+while True:
     b.render()
     b.battlefield.grid.draw(screen)
 
     b.run()
+    if b.scheduler.phase.name == 'end':
+        handle_input(b.scheduler.phase)
+        pass
 
     pygame.display.update()
     clock.tick(60)
-    # x = True
-    # while x:
-    #     key = pygame.event.wait()
-    #     if key.type == KEYDOWN:
-    #         if key.key == K_ESCAPE:
-    #             quit()
-    #         x = False
-    #         clock.tick(60)
 
 
 pygame.image.save(screen, 's.png')

@@ -46,7 +46,7 @@ class Row(Grouping):
         else:
             x = BATTLEGRID_W - 1
         y = self.field_y
-        troop.coord = (x, y)
+        troop.coord.set((x, y))
         image_pos = self.get_start_coord(side)
         #troop.position_image(image_pos)
         self.sides[side] = True

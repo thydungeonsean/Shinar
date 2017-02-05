@@ -15,16 +15,16 @@ class EngagementPhase(battle_phase.BattlePhase):
             self.end_phase()
 
     def end_phase_effects(self):
-        self.resolve_engagements()
-        self.assign_aftermath_actions()
+        retreats = self.resolve_engagements()
+        self.assign_aftermath_actions(retreats)
 
     def resolve_engagements(self):
-        self.owner.engagements.resolve_engagements()
+        return self.owner.engagements.resolve_engagements()
 
     def get_next_phase(self):
         return 'aftermath'
 
-    def assign_aftermath_actions(self):
+    def assign_aftermath_actions(self, retreats):
 
-        actions = self.owner.action_assigner.get_aftermath_actions()
+        actions = self.owner.action_assigner.get_aftermath_actions(retreats)
         self.owner.action_queue.extend(actions)

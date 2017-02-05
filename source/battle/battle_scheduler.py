@@ -1,9 +1,10 @@
 from ..constants import *
 from action_assigner import ActionAssigner
-from engagement import EngagementManager
+from engagement_manager import EngagementManager
 from phases.action_phase import ActionPhase
 from phases.engagement_phase import EngagementPhase
 from phases.aftermath_phase import AftermathPhase
+from phases.end_phase import EndPhase
 
 
 class BattleScheduler(object):
@@ -30,12 +31,11 @@ class BattleScheduler(object):
         self.phase = None
         self.phases = {'action': ActionPhase(self),
                        'engagement': EngagementPhase(self),
-                       'aftermath': AftermathPhase(self)}
+                       'aftermath': AftermathPhase(self),
+                       'end': EndPhase(self)}
 
         self.ready_troops = []
         self.action_queue = []
-
-        self.phase_count = 0
 
     def init_battle(self, battle):
 

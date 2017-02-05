@@ -2,7 +2,7 @@
 
 class Coord(object):
 
-    def __init__(self, x, y):
+    def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
         self.bound = None
@@ -19,6 +19,7 @@ class Coord(object):
 
     def bind(self, coord):
         self.bound = coord
+        self.bound.set(self.x, self.y)
 
     def unbind(self):
         self.bound = None

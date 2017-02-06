@@ -43,11 +43,10 @@ class ActionAssigner(object):
             try:
                 return in_range[coord]
             except KeyError:
-                print 'issue - action assigner'
+                pass
         return None
 
     def get_impeding_coord(self, troop, row):
-        #d = troop.dir_mod # TODO, this fix might not work
         d = troop.advance_dir_mod
         cx, cy = troop.coord.get
         ry = row.field_y

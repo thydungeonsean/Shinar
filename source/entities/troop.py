@@ -1,5 +1,5 @@
 from ..constants import *
-from ..images.image import TroopImage
+from ..images.troop_image import TroopImage
 from coord import Coord
 from random import shuffle, randint
 
@@ -36,6 +36,7 @@ class Troop(object):
         
         self.x_offset, self.y_offset = self.set_image_offsets()
         self.image = self.set_image()
+        self.coord.bind(self.image.coord)
 
     @property
     def pixel_coord(self):
@@ -91,11 +92,8 @@ class Troop(object):
     def draw(self, surface):
         self.image.draw(surface)
 
-    def position_image(self, (x, y)):  # TODO here is where coords interact with troop image
-        self.image.position((x, y))
-
-    def update_pos(self):
-        self.image.position(self.coord.get)
+    def update_pos(self):  # TODO here is where coords interact with troop image
+        self.image.position()
 
     def change_facing(self, facing):
         self.image.change_facing(facing)

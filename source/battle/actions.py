@@ -127,16 +127,14 @@ class Retreat(Move):
         Move.__init__(self, scheduler, actor, (ax, ay), (bx, by))
 
     def instant_effect(self):
-        # TODO move the .move() call to final effect, and modify the set_ani_mod call in the constructor to
-        # reflect this so the coord does not change until the unit has retreated a square
-        self.actor.move((self.bx, self.by))
+        self.actor.coord.unbind()
+        self.actor.image.coord.set((self.bx, self.by))
         print self.actor.tag + ' retreats to ' + str((self.bx, self.by))
         print self.actor.state
-        pass
 
     def final_effect(self):
-        pass
-        # self.actor.move((self.bx, self.by))
+        self.actor.move((self.bx, self.by))
+        self.actor.coord.bind(self.actor.image.coord)
         self.actor.decrement_retreat()
 
 
@@ -203,10 +201,11 @@ class Melee(Action):
 
         return bumps
 
-    def add_bump(self, bump, animation):
+    @classmethod
+    def add_bump(cls, bump, animation):
 
         i = 0
-        for mod in Melee.seq:
+        for mod in cls.seq:
             animation[i + bump] = mod
             i += 1
 

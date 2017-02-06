@@ -19,7 +19,7 @@ class Coord(object):
 
     def bind(self, coord):
         self.bound = coord
-        self.bound.set(self.x, self.y)
+        self.bound.set(self.get)
 
     def unbind(self):
         self.bound = None

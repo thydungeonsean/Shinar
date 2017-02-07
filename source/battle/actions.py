@@ -180,17 +180,26 @@ class Melee(Action):
     def __init__(self, scheduler, actor, target):
 
         Action.__init__(self, scheduler, actor)
+        self.y_mod = self.set_y_mod(target)
         self.animation = self.set_animation()
 
     def set_animation(self):
 
         bumps = self.set_bumps()
 
-        animation = [0 for i in range(self.end_tick)]
+        animation = {'x': [0 for i in range(self.end_tick)],
+                     'y': [0 for i in range(self.end_tick)]}
 
         for bump in bumps:
             self.add_bump(bump, animation)
         return animation
+
+    def set_y_mod(self, target):
+        if target.coord.y > self.actor.coord.y:
+            return 1
+        elif target.coord.y < self.actor.coord.y:
+            return -1
+        return 0
 
     def set_bumps(self):
 
@@ -206,17 +215,20 @@ class Melee(Action):
 
         i = 0
         for mod in cls.seq:
-            animation[i + bump] = mod
+            animation['x'][i + bump] = mod
             i += 1
 
-    def get_animation_mod(self):
-        mod = self.animation[self.tick] * self.actor.dir_mod
+    def get_animation_mod(self, axis):
+        if axis == 'x':
+            dir_mod = self.actor.dir_mod
+        else:
+            dir_mod = self.y_mod
+        mod = self.animation[axis][self.tick] * dir_mod
         return mod
 
     def perform_action(self):
 
-        # TODO need diagonal bumps
-        self.actor.image.set_ani_mod((self.get_animation_mod(), 0))
+        self.actor.image.set_ani_mod((self.get_animation_mod('x'), self.get_animation_mod('y')))
         self.actor.update_pos()
 
 

@@ -1,4 +1,5 @@
 import battle_phase
+from ..actions import AftermathRetreat
 
 
 class EngagementPhase(battle_phase.BattlePhase):
@@ -26,5 +27,15 @@ class EngagementPhase(battle_phase.BattlePhase):
 
     def assign_aftermath_actions(self, retreats):
 
-        actions = self.owner.action_assigner.get_aftermath_actions(retreats)
+        actions = self.get_aftermath_actions(retreats)
         self.owner.action_queue.extend(actions)
+
+    def get_aftermath_actions(self, retreats):
+
+        actions = []
+
+        for troop in retreats:
+            retreat = AftermathRetreat(self.owner, troop)
+            actions.append(retreat)
+
+        return actions

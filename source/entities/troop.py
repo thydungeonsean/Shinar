@@ -1,6 +1,7 @@
 from ..constants import *
 from ..images.troop_image import TroopImage
 from coord import Coord
+from unit_state_archive import UnitStateArchive
 from random import shuffle, randint
 
 
@@ -11,7 +12,7 @@ class Troop(object):
     def __init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness):
         
         self.location = location
-        self.coord = Coord() # TODO
+        self.coord = Coord()
 
         self.side = None
         self.dir_mod = 1
@@ -32,7 +33,7 @@ class Troop(object):
 
         self.needs_check = False
 
-        self.state = 'advance'
+        self.state = UnitStateArchive.get_state('advance')
         
         self.x_offset, self.y_offset = self.set_image_offsets()
         self.image = self.set_image()
@@ -113,7 +114,7 @@ class Troop(object):
         self.coord.set((x, y))
 
     def change_state(self, state):
-        self.state = state
+        self.state = UnitStateArchive.get_state(state)
 
     # combat algorithm methods
     def damage_cohesion(self):
@@ -133,7 +134,6 @@ class Troop(object):
         self.break_points = 0
 
     def set_retreat_count(self, margin):
-        # self.retreat_count = (margin + 1) / 2
         self.retreat_count = margin
 
     def decrement_retreat(self):
@@ -188,7 +188,6 @@ class Troop(object):
         if check > (self.morale - self.break_points):
             # morale failure
             margin = check - (self.morale - self.break_points)
-            print self.tag + ' retreat count ' + str(margin)
             self.set_retreat_count(margin)
             self.breaks()
             return True
@@ -200,6 +199,11 @@ class Troop(object):
     def breaks(self):
         self.change_state('flee')
         self.reset_break_points()
+
+    def get_next_action(self):
+        if self.needs_check:
+            self.morale_check()
+        return self.state.get_next_action(self)
 
 
 class Infantry(Troop):
@@ -288,7 +292,7 @@ class Archer(Troop):
     def fire(self, target):
         hits = self.roll_engagement_dice(target, self.fire_strength)
         self.apply_hits(target, hits)
-        if target.state != 'engage':
+        if target.state.name != 'engage':
             target.check()
 
 
@@ -318,3 +322,6 @@ class Chariot(Troop):
 
     def set_image_offsets(self):
         return scale_tuple((-2, 0))
+
+    def set_retreat_count(self, margin):
+        self.retreat_count = margin + 1  # TODO maybe make this more explicit

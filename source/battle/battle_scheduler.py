@@ -1,5 +1,5 @@
 from ..constants import *
-from action_assigner import ActionAssigner
+from ..entities.unit_state_archive import UnitStateArchive
 from engagement_manager import EngagementManager
 from phases.action_phase import ActionPhase
 from phases.engagement_phase import EngagementPhase
@@ -40,8 +40,7 @@ class BattleScheduler(object):
     def init_battle(self, battle):
 
         self.battle = battle
-        self.action_assigner = ActionAssigner.get_instance()
-        self.action_assigner.init_battle(self.battle, self)
+        UnitStateArchive.init_battle(battle)
         self.engagements = EngagementManager.get_instance()
 
         self.phase = self.phases['action']

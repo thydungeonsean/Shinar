@@ -73,8 +73,6 @@ class Move(Action):
     def instant_effect(self):
 
         self.actor.move((self.bx, self.by))
-        print self.actor.tag + ' moves to ' + str((self.bx, self.by))
-        print self.actor.state
 
     def set_coord_mod(self):
 
@@ -129,8 +127,6 @@ class Retreat(Move):
     def instant_effect(self):
         self.actor.coord.unbind()
         self.actor.image.coord.set((self.bx, self.by))
-        print self.actor.tag + ' retreats to ' + str((self.bx, self.by))
-        print self.actor.state
 
     def final_effect(self):
         self.actor.move((self.bx, self.by))

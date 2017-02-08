@@ -1,5 +1,6 @@
 from ...constants import FRAMES_PER_TURN
 import battle_phase
+from ..actions import EngagementMelee
 
 
 class ActionPhase(battle_phase.BattlePhase):
@@ -21,7 +22,7 @@ class ActionPhase(battle_phase.BattlePhase):
 
     def set_troop_actions(self):
         for troop in self.owner.ready_troops:
-            new_action = self.owner.action_assigner.get_next_action(troop)
+            new_action = troop.get_next_action()
             self.owner.action_queue.append(new_action)
         del self.owner.ready_troops[:]
 
@@ -46,13 +47,20 @@ class ActionPhase(battle_phase.BattlePhase):
 
     def engage_all(self):
         for troop in self.owner.battle.left_army.troops:
-            if troop.state not in ('flee', 'rout'):
-                target = self.owner.action_assigner.check_melee_target(troop)
+            if troop.state.name not in ('flee', 'rout'):
+                target = troop.state.check_melee_target(troop)
                 if target is not None:
                     # TODO need to find way to get supports to work here
                     self.owner.engagements.initiate_engagement(troop, target)
 
     def assign_engagement_actions(self):
         for engagement in self.owner.engagements.engagements:
-            actions = self.owner.action_assigner.get_engagement_melees(engagement)
+            actions = self.get_engagement_melees(engagement)
             self.owner.action_queue.extend(actions)
+
+    def get_engagement_melees(self, e):
+
+        actions = [EngagementMelee(self.owner, e.attacker, e.defender),
+                   EngagementMelee(self.owner, e.defender, e.attacker)]
+
+        return actions

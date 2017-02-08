@@ -33,7 +33,7 @@ def handle_input(phase):
 
 while True:
     b.render()
-    b.battlefield.grid.draw(screen)
+    # b.battlefield.grid.draw(screen)
 
     b.run()
     if b.scheduler.phase.name == 'end':

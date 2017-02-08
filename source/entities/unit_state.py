@@ -1,8 +1,12 @@
+from ..battle.actions import *
 
 
 class UnitState(object):
 
-    def __init__(self):
+    def __init__(self, name, moving=False):
+
+        self.name = name
+        self.moving = moving
 
         self.battle = None
         self.battlefield = None
@@ -55,52 +59,152 @@ class UnitState(object):
         if troop.type == 'chariot':
             return False
         row_id = troop.location.field_y
-        adj = self.battle_field.get_adj_rows(row_id)
+        adj = self.battlefield.get_adj_rows(row_id)
         for row in adj:
             lock_coord = self.get_impeding_coord(troop, row)
             for t in row.troops:
-                if t.coord == lock_coord and t.side != troop.side:
+                if t.coord.get == lock_coord and t.side != troop.side:
                     return True
 
         return False
+
+    def get_melee_action(self, troop):
+
+        target = self.check_melee_target(troop)
+        if target is not None:
+            if target.state.moving:
+                troop.harry(target)
+                troop.change_state('harry')
+            else:
+                self.engagements.initiate_engagement(troop, target)
+
+            return Melee(self.scheduler, troop, target)
+        else:
+            return None
+
+    def get_ranged_action(self, troop):
+
+        target = self.check_range_target(troop)
+        if target is not None:
+            troop.change_state('fire')
+            troop.fire(target)
+            return Fire(self.scheduler, troop, target)
+        return None
+
+    def continue_melee(self, troop):
+
+        target = self.engagements.get_opposing(troop)
+        return Melee(self.scheduler, troop, target)
+
+    def get_next_action(self, troop):
+        return True
 
 
 class Advancing(UnitState):
 
     def __init__(self):
-        UnitState.__init__(self)
+        UnitState.__init__(self, 'advance', True)
+
+    def get_next_action(self, troop):
+
+        melee = self.get_melee_action(troop)
+        if melee is not None:
+            return melee
+
+        if troop.type == 'archer':
+            ranged = self.get_ranged_action(troop)
+            if ranged is not None:
+                return ranged
+
+        locked = self.check_if_locked(troop)
+        if locked:
+            return Hold(self.scheduler, troop)
+
+        # free to advance
+        return Advance(self.scheduler, troop)
 
 
 class Harrying(UnitState):
     def __init__(self):
-        UnitState.__init__(self)
+        UnitState.__init__(self, 'harry')
+
+    def get_next_action(self, troop):
+
+        melee = self.get_melee_action(troop)
+        if melee is not None:
+            return melee
+
+        if troop.type == 'archer':
+            ranged = self.get_ranged_action(troop)
+            if ranged is not None:
+                return ranged
+
+        locked = self.check_if_locked(troop)
+        if locked:
+            return Hold(self.scheduler, troop)
+
+        # free to advance
+        return Advance(self.scheduler, troop)
 
 
 class Supporting(UnitState):
     def __init__(self):
-        UnitState.__init__(self)
+        UnitState.__init__(self, 'support')
+
+    def get_next_action(self, troop):
+        return None
 
 
 class Firing(UnitState):
     def __init__(self):
-        UnitState.__init__(self)
+        UnitState.__init__(self, 'fire')
+
+    def get_next_action(self, troop):
+
+        melee = self.get_melee_action(troop)
+        if melee is not None:
+            return melee
+
+        if troop.type == 'archer':
+            ranged = self.get_ranged_action(troop)
+            if ranged is not None:
+                return ranged
+
+        locked = self.check_if_locked(troop)
+        if locked:
+            return Hold(self.scheduler, troop)
+
+        # free to advance
+        return Advance(self.scheduler, troop)
 
 
 class Engaging(UnitState):
     def __init__(self):
-        UnitState.__init__(self)
+        UnitState.__init__(self, 'engage')
+
+    def get_next_action(self, troop):
+
+        target = self.engagements.get_opposing(troop)
+        return Melee(self.scheduler, troop, target)
 
 
 class Holding(UnitState):
     def __init__(self):
-        UnitState.__init__(self)
+        UnitState.__init__(self, 'hold')
+
+    def get_next_action(self, troop):
+        return Hold(self.scheduler, troop)
 
 
 class Fleeing(UnitState):
     def __init__(self):
-        UnitState.__init__(self)
+        UnitState.__init__(self, 'flee', True)
+
+    def get_next_action(self, troop):
+        return Retreat(self.scheduler, troop)
 
 
 class Routing(Fleeing):
     def __init__(self):
         Fleeing.__init__(self)
+        self.name = 'rout'

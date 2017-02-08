@@ -42,7 +42,7 @@ class EngagementManager(object):
         self.engagements.remove(engagement)
         for t in engagement.involved_troops:
             if t.state not in ('flee', 'rout'):
-                t.state = 'advance'
+                t.change_state('advance')
             del self.engagement_dict[t]
 
     def support_engagement(self, supporter, target):

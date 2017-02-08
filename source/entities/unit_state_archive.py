@@ -23,3 +23,7 @@ class UnitStateArchive(object):
     def deinit_battle(cls):
         for unit_state in cls.states.values():
             unit_state.deinit_battle()
+
+    @classmethod
+    def get_state(cls, state):
+        return cls.states[state]

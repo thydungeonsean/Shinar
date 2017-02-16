@@ -292,13 +292,14 @@ class Archer(Troop):
     def fire(self, target):
         hits = self.roll_engagement_dice(target, self.fire_strength)
         self.apply_hits(target, hits)
-        if target.state.name != 'engage':
+        # TODO - should firing cause supporters to break in battle?
+        if target.state.name not in ('engage', 'support'):
             target.check()
 
 
 class Chariot(Troop):
 
-    coh = 7
+    coh = 10
     mor = 10
     speed = 5
     str = 'archer'

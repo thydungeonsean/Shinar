@@ -212,6 +212,7 @@ class Melee(Action):
         i = 0
         for mod in cls.seq:
             animation['x'][i + bump] = mod
+            animation['y'][i + bump] = mod
             i += 1
 
     def get_animation_mod(self, axis):

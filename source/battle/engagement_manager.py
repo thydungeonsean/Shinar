@@ -29,6 +29,19 @@ class EngagementManager(object):
         self.battle = None
         del self.engagements[:]
 
+    def determine_engagement(self, attacker, defender, direction):
+
+        if defender.state.name == 'engage':
+            if direction == 'orth':
+                self.switch_engagement_direction(attacker, defender)
+            else:
+                self.support_engagement(attacker, defender)
+        elif defender.state.name == 'support':
+            self.break_support(defender)
+            self.initiate_engagement(attacker, defender)
+        else:
+            self.initiate_engagement(attacker, defender)
+
     def initiate_engagement(self, attacker, defender):
 
         new_engagement = Engagement(attacker, defender)
@@ -41,18 +54,42 @@ class EngagementManager(object):
     def deinitiate_engagement(self, engagement):
         self.engagements.remove(engagement)
         for t in engagement.involved_troops:
-            if t.state not in ('flee', 'rout'):
+            if t.state.name not in ('flee', 'rout'):
                 t.change_state('advance')
             del self.engagement_dict[t]
 
     def support_engagement(self, supporter, target):
         engagement = self.get_engagement(target)
         engagement.add_supporter(supporter)
+        self.engagement_dict[supporter] = engagement
+        supporter.change_state('support')
 
     def break_support(self, troop):  # when a troop supporting an engagement is engaged or forced to retreat
         engagement = self.get_engagement(troop)
         engagement.remove_supporter(troop)
+        if troop.state.name not in ('flee', 'rout'):
+            troop.change_state('advance')
         del self.engagement_dict[troop]
+        # TODO does harrying / firing have any effect on supporters?
+
+    def switch_engagement_direction(self, attacker, defender):
+        diagonal_engagement = self.get_engagement(defender)
+
+
+        involved_troops = diagonal_engagement.involved_troops[:]
+        self.deinitiate_engagement(diagonal_engagement)
+
+        self.initiate_engagement(attacker, defender)
+        for t in (attacker, defender):
+            if t in involved_troops:
+                involved_troops.remove(t)
+
+        while involved_troops:
+            t = involved_troops[0]
+            action = t.state.get_melee_action(t)
+            if action is None:
+                print '********************** is this ok?'
+            involved_troops.remove(t)
 
     def get_engagement(self, troop):
         return self.engagement_dict[troop]

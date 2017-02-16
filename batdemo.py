@@ -2,6 +2,7 @@ import os
 import pygame
 from pygame.locals import *
 from source.constants import *
+from tools.rand_dist import *
 
 import source.battle.battle as battle
 
@@ -13,8 +14,11 @@ pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = "TRUE"
 screen = pygame.display.set_mode((SCREENW, SCREENH))
 
-red = Army('a', RED, 3, 5, 2)
-blue = Army('b', YELLOW, 4, 4, 0)
+i, a, c = rand_dist()
+red = Army('a', RED, i, a, c)
+
+i, a, c = rand_dist()
+blue = Army('b', YELLOW, i, a, c)
 
 b = battle.Battle('s', red, blue)
 
@@ -38,7 +42,7 @@ while True:
     b.run()
     if b.scheduler.phase.name == 'end':
         handle_input(b.scheduler.phase)
-        pass
+        #b.scheduler.phase.end_phase()
 
     pygame.display.update()
     clock.tick(60)

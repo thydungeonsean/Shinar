@@ -34,8 +34,7 @@ class ActionPhase(battle_phase.BattlePhase):
     def end_phase_effects(self):
         print 'end of action phase'
         self.tick = 0
-        if not self.owner.engagements.engagements:
-            self.engage_all()
+        self.engage_all()
 
     def get_next_phase(self):
         if self.owner.engagements.engagements:
@@ -47,11 +46,17 @@ class ActionPhase(battle_phase.BattlePhase):
 
     def engage_all(self):
         for troop in self.owner.battle.left_army.troops:
-            if troop.state.name not in ('flee', 'rout'):
-                target = troop.state.check_melee_target(troop)
-                if target is not None:
-                    # TODO need to find way to get supports to work here
-                    self.owner.engagements.initiate_engagement(troop, target)
+            if troop.state.name not in ('flee', 'rout', 'engage', 'support'):
+                self.check_melee(troop)
+        for troop in self.owner.battle.right_army.troops:
+            if troop.state.name not in ('flee', 'rout', 'engage', 'support'):
+                self.check_melee(troop)
+
+    def check_melee(self, troop):
+
+        target, direction = troop.state.check_melee_target(troop)
+        if target is not None:
+            troop.state.engagements.determine_engagement(troop, target, direction)
 
     def assign_engagement_actions(self):
         for engagement in self.owner.engagements.engagements:
@@ -62,5 +67,10 @@ class ActionPhase(battle_phase.BattlePhase):
 
         actions = [EngagementMelee(self.owner, e.attacker, e.defender),
                    EngagementMelee(self.owner, e.defender, e.attacker)]
+        # add support melees
+        for t in e.attack_supporters:
+            actions.append(EngagementMelee(self.owner, t, e.defender))
+        for t in e.defence_supporters:
+            actions.append(EngagementMelee(self.owner, t, e.attacker))
 
         return actions

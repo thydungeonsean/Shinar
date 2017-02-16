@@ -1,4 +1,5 @@
 from ..battle.actions import *
+from random import choice
 
 
 class UnitState(object):
@@ -28,12 +29,60 @@ class UnitState(object):
         self.engagements = None
 
     def check_melee_target(self, troop):
+
+        impedeing = self.check_impedeing_target(troop)
+        if impedeing is not None:
+            return impedeing, 'orth'
+
+        diagonal = self.check_diagonal_target(troop)
+
+        return diagonal, 'diag'
+
+    def check_impedeing_target(self, troop):
         row = troop.location
         target_coord = self.get_impeding_coord(troop, row)
         for t in row.troops:
             if t.coord.get == target_coord and t.side != troop.side:
                 return t
         return None
+
+    def check_diagonal_target(self, troop):
+        if troop.type == 'chariot':
+            return None
+
+        adj_rows = self.battlefield.get_adj_rows(troop.location.field_y)
+        targets = []
+        for row in adj_rows:
+            target_coord = self.get_impeding_coord(troop, row)
+            for target in row.troops:
+                if target.coord.get == target_coord and target.side != troop.side:
+                    targets.append(target)
+
+        if not targets:
+            return None
+        if len(targets) == 1:
+            return targets[0]
+
+        return self.get_preferred_target(targets)
+
+    @staticmethod
+    def get_preferred_target(targets):
+
+        engaged = []
+        supporting = []
+        free = []
+
+        for t in targets:
+            if t.state.name == 'engage':
+                engaged.append(t)
+            elif t.state.name == 'support':
+                supporting.append(t)
+            else:
+                free.append(t)
+
+        for l in [free, supporting, engaged]:
+            if l:  # list has members
+                return choice(l)
 
     def check_range_target(self, troop):
         fire_range = troop.get_fire_range()
@@ -49,7 +98,8 @@ class UnitState(object):
                 pass
         return None
 
-    def get_impeding_coord(self, troop, row):
+    @staticmethod
+    def get_impeding_coord(troop, row):
         d = troop.advance_dir_mod
         cx, cy = troop.coord.get
         ry = row.field_y
@@ -70,13 +120,16 @@ class UnitState(object):
 
     def get_melee_action(self, troop):
 
-        target = self.check_melee_target(troop)
+        target, direction = self.check_melee_target(troop)
         if target is not None:
             if target.state.moving:
-                troop.harry(target)
-                troop.change_state('harry')
+                if direction == 'orth':
+                    troop.harry(target)
+                    troop.change_state('harry')
+                elif direction == 'diag':
+                    pass  #TODO something for this state?
             else:
-                self.engagements.initiate_engagement(troop, target)
+                self.engagements.determine_engagement(troop, target, direction)
 
             return Melee(self.scheduler, troop, target)
         else:
@@ -147,14 +200,6 @@ class Harrying(UnitState):
         return Advance(self.scheduler, troop)
 
 
-class Supporting(UnitState):
-    def __init__(self):
-        UnitState.__init__(self, 'support')
-
-    def get_next_action(self, troop):
-        return None
-
-
 class Firing(UnitState):
     def __init__(self):
         UnitState.__init__(self, 'fire')
@@ -186,6 +231,12 @@ class Engaging(UnitState):
 
         target = self.engagements.get_opposing(troop)
         return Melee(self.scheduler, troop, target)
+
+
+class Supporting(Engaging):
+    def __init__(self):
+        Engaging.__init__(self)
+        self.name = 'support'
 
 
 class Holding(UnitState):

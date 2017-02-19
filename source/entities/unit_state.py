@@ -259,3 +259,6 @@ class Routing(Fleeing):
     def __init__(self):
         Fleeing.__init__(self)
         self.name = 'rout'
+
+    def get_next_action(self, troop):
+        return Rout(self.scheduler, troop)

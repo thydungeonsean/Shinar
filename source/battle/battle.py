@@ -1,11 +1,13 @@
 import pygame
 from ..states.state import State
+from ..states.observer import Observer, ReporterComponent
 from ..map.battlefield import BattleField
 from ..entities.army import Army
 from ..images.image import Image
 from battle_scheduler import BattleScheduler
 from ..entities.effect import EffectManager
 from engagement_manager import EngagementManager
+from battle_scale import BattleScale
 
 
 class Battle(State):
@@ -23,16 +25,22 @@ class Battle(State):
         self.right_army.set_side('right')
 
         self.engagements = EngagementManager.get_instance()
-        self.engagements.init_battle(self)
 
         self.scheduler = BattleScheduler.get_instance()
-        self.scheduler.init_battle(self)
         self.turn_ready = True
 
         self.effects = EffectManager.get_instance()
 
+        self.battle_scale = BattleScale.get_instance()
+
         self.autoassign()
-        #self.assign_troops()
+
+        self.init_battle()
+
+    def init_battle(self):
+        self.engagements.init_battle(self)
+        self.scheduler.init_battle(self)
+        self.battle_scale.init_battle(self)
 
     def set_battle_view(self):
         w = self.battlefield.map_image_rect.w
@@ -45,6 +53,7 @@ class Battle(State):
         screen = pygame.display.get_surface()
 
         self.battlefield.draw(self.battle_view)
+        self.battle_scale.draw(self.battle_view)
         self.effects.draw(self.battle_view)
         self.battle_view.draw(screen)
 
@@ -62,25 +71,41 @@ class Battle(State):
             for i in range(roster.len()):
                 troop = self.left_army.get_troop(type)
                 row = self.battlefield.get_empty_row('left')
-                row.assign_to_row(troop, 'left')
+                self.assign_troop(troop, row)
+
+                troop.set_reporter_component(ReporterComponent(Observer.get_instance()))
 
         for type in Army.troop_types:
             roster = self.right_army.stacks[type]
             for i in range(roster.len()):
                 troop = self.right_army.get_troop(type)
                 row = self.battlefield.get_empty_row('right')
-                row.assign_to_row(troop, 'right')
+                self.assign_troop(troop, row)
 
-    # testing
-    def assign_troops(self):
+                troop.set_reporter_component(ReporterComponent(Observer.get_instance()))
 
-        t = self.left_army.get_troop('infantry')
-        row = self.battlefield.rows[0]
-        row.assign_to_row(t, 'left')
-        t = self.right_army.get_troop('chariot')
-        row = self.battlefield.rows[0]
-        row.assign_to_row(t, 'right')
+    def assign_troop(self, troop, row):
+        row.assign_to_row(troop, troop.side)
+        troop.activate()
+
+    @property
+    def active_left_troops(self):
+        count = 0
+        print self.left_army.troops
+        for troop in self.left_army.troops:
+            if troop.active:
+                count += 1
+        return count
+
+    @property
+    def active_right_troops(self):
+        count = 0
+        for troop in self.right_army.troops:
+            if troop.active:
+                count += 1
+        return count
 
     def run(self):
         self.scheduler.run()
         self.effects.run()
+        self.battle_scale.run()

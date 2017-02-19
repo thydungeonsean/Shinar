@@ -108,7 +108,7 @@ class Advance(Move):
 
     def __init__(self, scheduler, actor):
 
-        actor.advance()
+        actor.set_image_to_advance()
         ax, ay = actor.coord.get
         bx = ax + actor.dir_mod
         by = ay
@@ -118,7 +118,7 @@ class Advance(Move):
 class Retreat(Move):
 
     def __init__(self, scheduler, actor):
-        actor.retreat()
+        actor.set_image_to_retreat()
         ax, ay = actor.coord.get
         bx = ax + actor.dir_mod
         by = ay
@@ -132,6 +132,9 @@ class Retreat(Move):
         self.actor.move((self.bx, self.by))
         self.actor.coord.bind(self.actor.image.coord)
         self.actor.decrement_retreat()
+        if self.actor.state.name in ('flee', 'rout'):
+            if 0 > self.actor.coord.x >= BATTLEGRID_W:  # unit is off map
+                self.actor.change_state('rout')
 
 
 class AftermathRetreat(Retreat):
@@ -143,6 +146,17 @@ class AftermathRetreat(Retreat):
 
         self.final_effect()
         self.scheduler.complete_action(self, ready=False)
+
+
+class Rout(Retreat):
+
+    def __init__(self, scheduler, actor):
+        Retreat.__init__(self, scheduler, actor)
+
+    def complete(self):
+        self.final_effect()
+        self.scheduler.complete_action(self, ready=False)
+        self.actor.rout()
 
 
 class Fire(Action):

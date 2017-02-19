@@ -11,9 +11,6 @@ class Grouping(object):
         
         self.troops = []
         
-    def get_coord(self, troop):
-        return None
-        
     def add(self, troop):
         self.troops.append(troop)
 
@@ -24,7 +21,7 @@ class Grouping(object):
             print troop + 'was not in ' + self + 'when attempting to remove'
 
     def get_next(self):
-        return self.troops.pop()
+        return self.troops[0]
 
     def len(self):
         return len(self.troops)

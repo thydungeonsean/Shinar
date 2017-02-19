@@ -19,9 +19,6 @@ class Row(Grouping):
 
         Grouping.__init__(self)
 
-    def get_position(self, troop):
-        pass
-
     def set_y(self):
         return BATTLEGRID_SQUARE_H * self.field_y + BATTLEFIELD_Y_MARGIN
 
@@ -30,23 +27,22 @@ class Row(Grouping):
         for item in self.troops:
             item.draw(surface)
 
-    def get_start_coord(self, side):
-
-        if side == 'left':
-            x = BATTLEFIELD_X_MARGIN
-        elif side == 'right':
-            x = BATTLEFIELD_W - BATTLEFIELD_X_MARGIN - BATTLEGRID_SQUARE_W
-        return x, self.y
+    # def get_start_coord(self, side):
+    #
+    #     if side == 'left':
+    #         x = BATTLEFIELD_X_MARGIN
+    #     elif side == 'right':
+    #         x = BATTLEFIELD_W - BATTLEFIELD_X_MARGIN - BATTLEGRID_SQUARE_W
+    #     return x, self.y
 
     def assign_to_row(self, troop, side):
-        self.add(troop)
-        troop.location = self
+        print troop.location
+        troop.change_location(self)
+        print troop.location
         if side == 'left':
             x = 0
         else:
             x = BATTLEGRID_W - 1
         y = self.field_y
         troop.coord.set((x, y))
-        image_pos = self.get_start_coord(side)
-        #troop.position_image(image_pos)
         self.sides[side] = True

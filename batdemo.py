@@ -1,12 +1,10 @@
 import os
 import pygame
 from pygame.locals import *
+from tools.rand_dist import rand_dist
 from source.constants import *
-from tools.rand_dist import *
 
 import source.battle.battle as battle
-
-from source.entities.troop import *
 from source.entities.army import Army
 
 
@@ -18,7 +16,7 @@ i, a, c = rand_dist()
 red = Army('a', RED, i, a, c)
 
 i, a, c = rand_dist()
-blue = Army('b', YELLOW, i, a, c)
+blue = Army('b', YELLOW, 2, 2, 4)
 
 b = battle.Battle('s', red, blue)
 

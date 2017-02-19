@@ -36,25 +36,27 @@ class Army(Grouping):
 
         for i in range(inf):
             new = Infantry(self, self.team, self.color)
-            self.add(new)
+            self.add_troop(new)
         for i in range(arch):
             new = Archer(self, self.team, self.color)
-            self.add(new)
+            self.add_troop(new)
         for i in range(char):
             new = Chariot(self, self.team, self.color)
-            self.add(new)
+            self.add_troop(new)
 
-    def add(self, troop):
-        self.troops.append(troop)
+    def add_troop(self, troop):
+        self.add(troop)
         self.add_to_stack(troop)
 
     def add_to_stack(self, troop):
         stack = troop.type
-        self.stacks[stack].add(troop)
+        troop.init_location(self.stacks[stack])
 
     def get_troop(self, type):
         stack = self.stacks[type]
-        return stack.get_next()
+        next = stack.get_next()
+        print next
+        return next
 
     def set_side(self, side):
         self.side = side

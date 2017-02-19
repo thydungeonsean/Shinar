@@ -9,17 +9,22 @@ class Troop(object):
 
     count = 0
 
-    def __init__(self, location, team, color, type, cohesion, morale, speed, strength, weakness):
-        
-        self.location = location
+    def __init__(self, army, team, color, type, cohesion, morale, speed, strength, weakness):
+
+        self.army = army
+        self.location = None
         self.coord = Coord()
-
-        self.side = None
-        self.dir_mod = 1
-
         self.team = team
         self.color = color
-        
+
+        # these will be set according to battle_init
+        self.side = None
+        self.dir_mod = 1
+        self.reporter_component = None
+
+        self.active = False
+
+        # stats
         self.type = type
         self.cohesion = cohesion
         self.max_cohesion = cohesion
@@ -38,6 +43,17 @@ class Troop(object):
         self.x_offset, self.y_offset = self.set_image_offsets()
         self.image = self.set_image()
         self.coord.bind(self.image.coord)
+
+    def init_location(self, location):
+        self.set_location(location)
+
+    def change_location(self, new):
+        self.location.remove(self)
+        self.set_location(new)
+
+    def set_location(self, location):
+        self.location = location
+        location.add(self)
 
     @property
     def pixel_coord(self):
@@ -90,6 +106,15 @@ class Troop(object):
     def set_dir_mod(self, dir_mod):
         self.dir_mod = dir_mod
 
+    def set_reporter_component(self, reporter):
+        self.reporter_component = reporter
+
+    def activate(self):
+        self.active = True
+
+    def deactivate(self):
+        self.active = False
+
     def draw(self, surface):
         self.image.draw(surface)
 
@@ -99,11 +124,11 @@ class Troop(object):
     def change_facing(self, facing):
         self.image.change_facing(facing)
 
-    def retreat(self):
+    def set_image_to_retreat(self):
         self.set_dir_mod(self.retreat_dir_mod)
         self.change_facing(self.image_facing)
 
-    def advance(self):
+    def set_image_to_advance(self):
         self.set_dir_mod(self.advance_dir_mod)
         self.change_facing(self.image_facing)
 
@@ -115,6 +140,8 @@ class Troop(object):
 
     def change_state(self, state):
         self.state = UnitStateArchive.get_state(state)
+        if self.state.name == 'flee':
+            self.reporter_component.send_report('unit', self.side, 'flee')
 
     # combat algorithm methods
     def damage_cohesion(self):
@@ -140,15 +167,21 @@ class Troop(object):
         self.retreat_count -= 1
         if self.retreat_count <= 0:
             self.change_state('advance')
-            self.advance()
+            self.set_image_to_advance()
+            self.reporter_component.send_report('unit', self.side, 'recover')
+
+    def rout(self):  # remove from battle
+        self.location.remove(self)
 
     def hit(self, target):
 
         effect = randint(0, 2)
         if effect == 0:
             target.damage_cohesion()
+            self.reporter_component.send_report('unit', self.side, 'hit')
         elif effect == 1:
             target.damage_morale()
+            self.reporter_component.send_report('unit', self.side, 'hit')
         elif effect == 2:
             target.add_break_point()
 

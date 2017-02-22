@@ -5,6 +5,7 @@ class UnitStateArchive(object):
 
     states = {
               'advance': Advancing(),
+              'pursue': Pursuing(),
               'harry': Harrying(),
               'support': Supporting(),
               'engage': Engaging(),

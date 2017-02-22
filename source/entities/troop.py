@@ -47,8 +47,15 @@ class Troop(object):
     def init_location(self, location):
         self.set_location(location)
 
-    def change_location(self, new):
+    def remove_from_location(self):
         self.location.remove(self)
+        self.location = None
+
+    def remove_from_army(self):
+        self.army.remove(self)
+
+    def change_location(self, new):
+        self.remove_from_location()
         self.set_location(new)
 
     def set_location(self, location):
@@ -171,7 +178,16 @@ class Troop(object):
             self.reporter_component.send_report('unit', self.side, 'recover')
 
     def rout(self):  # remove from battle
-        self.location.remove(self)
+        self.remove_from_location()
+        self.remove_from_army()
+        self.deactivate()
+        self.reporter_component.send_report('unit', self.side, 'rout')
+
+    def pursue(self):
+        self.remove_from_location()
+        self.remove_from_army()
+        self.deactivate()
+        self.reporter_component.send_report('unit', self.side, 'pursue')
 
     def hit(self, target):
 

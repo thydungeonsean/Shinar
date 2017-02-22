@@ -36,9 +36,7 @@ class Row(Grouping):
     #     return x, self.y
 
     def assign_to_row(self, troop, side):
-        print troop.location
         troop.change_location(self)
-        print troop.location
         if side == 'left':
             x = 0
         else:

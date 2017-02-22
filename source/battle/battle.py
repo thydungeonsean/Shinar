@@ -8,6 +8,8 @@ from battle_scheduler import BattleScheduler
 from ..entities.effect import EffectManager
 from engagement_manager import EngagementManager
 from battle_scale import BattleScale
+from ..constants import BATTLEFIELD_COORD
+from ..states.screen_layout_collection import ScreenLayoutCollection
 
 
 class Battle(State):
@@ -35,22 +37,42 @@ class Battle(State):
 
         self.autoassign()
 
+        self.init_state()
+
+    def init_state(self):
         self.init_battle()
+        self.controller.bind_to_state(self)
+        self.switch_screen_layout()
+
+    def deinit_state(self):
+        pass
 
     def init_battle(self):
         self.engagements.init_battle(self)
         self.scheduler.init_battle(self)
         self.battle_scale.init_battle(self)
 
+    def switch_screen_layout(self):
+
+        self.screen_layout = ScreenLayoutCollection.BATTLE_LAYOUT
+        ScreenLayoutCollection.init_battle_layout()
+
+    def handle_input(self):
+        self.controller.handle_input()
+
     def set_battle_view(self):
+
         w = self.battlefield.map_image_rect.w
         h = self.battlefield.map_image_rect.h
         view = Image.get_sized_image(w, h)
+        view.position(BATTLEFIELD_COORD)
         return view
 
     def render(self):
 
         screen = pygame.display.get_surface()
+
+        self.screen_layout.draw(screen)
 
         self.battlefield.draw(self.battle_view)
         self.battle_scale.draw(self.battle_view)
@@ -91,7 +113,6 @@ class Battle(State):
     @property
     def active_left_troops(self):
         count = 0
-        print self.left_army.troops
         for troop in self.left_army.troops:
             if troop.active:
                 count += 1

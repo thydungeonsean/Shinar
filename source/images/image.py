@@ -60,7 +60,7 @@ class Image(object):
 
     def position(self, (x, y)):
     
-        self.rect.topleft = ((x*TILEW)+self.x_offset, (y*TILEH)+self.y_offset)
+        self.rect.topleft = (x, y)
         
     def draw(self, surface):
         

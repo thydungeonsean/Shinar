@@ -10,7 +10,9 @@ class BattleScale(object):
     point_ref = {
         'flee': -5,
         'recover': 5,
-        'hit': 1
+        'hit': 1,
+        'rout': -5,
+        'pursue': 10
     }
 
     @classmethod

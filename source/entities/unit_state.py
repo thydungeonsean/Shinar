@@ -177,6 +177,15 @@ class Advancing(UnitState):
         return Advance(self.scheduler, troop)
 
 
+class Pursuing(UnitState):
+
+    def __init__(self):
+        UnitState.__init__(self, 'pursuing', True)
+
+    def get_next_action(self, troop):
+        return Pursue(self.scheduler, troop)
+
+
 class Harrying(UnitState):
     def __init__(self):
         UnitState.__init__(self, 'harry')

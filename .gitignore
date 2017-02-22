@@ -11,6 +11,7 @@ assets/sprites/chariot.png
 
 # ignore screenshot
 s.png
+gui.png
 
 # ignore pyinstaller artifacts
 *.spec
@@ -24,5 +25,5 @@ packages/
 # ignore font
 *.ttf
 
-# ignore worspace play around test folder
+# ignore workspace play around test folder
 workspace

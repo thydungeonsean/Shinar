@@ -44,10 +44,10 @@ class MapImageGenerator(object):
     def init_tile_images(self):
         
         tile_images = {
-                0: TileImage('desert'),
-                1: TileImage('plain'),
-                2: TileImage('fertile'),
-                3: TileImage('river')
+                0: MapTileImage('desert'),
+                1: MapTileImage('plain'),
+                2: MapTileImage('fertile'),
+                3: MapTileImage('river')
         }
         
         return tile_images
@@ -168,11 +168,11 @@ class DitherImageGenerator(object):
             }
     
     def __init__(self):
-        self.dither_tileset = Image('dither', colorkey=WHITE)
+        self.dither_tileset = TileImage('dither', colorkey=WHITE)
     
     def generate_pattern(self, d_value):
         
-        d_img = Image(colorkey=WHITE)
+        d_img = TileImage(colorkey=WHITE)
         image_instructions = self.parse_dither_value(d_value)
 
         for d_id, pos in image_instructions:        
@@ -181,7 +181,7 @@ class DitherImageGenerator(object):
         return d_img
     
     def recolor_pattern(self, pattern, terrain):
-        img = Image(colorkey=WHITE)
+        img = TileImage(colorkey=WHITE)
         pattern.draw(img)
         color = DitherImageGenerator.color_key[terrain]
         img.recolor(BLACK, color)
@@ -191,8 +191,8 @@ class DitherImageGenerator(object):
         
         parsed = set()
         
-        card = set([1, 3, 5, 7])
-        diag = set([0, 2, 4, 6])
+        card = {1, 3, 5, 7}
+        diag = {0, 2, 4, 6}
         
         cardinals = []
         for e in value: 
@@ -299,10 +299,18 @@ class DitherImageGenerator(object):
         img.blit(self.dither_tileset.image, (0,0), (x, y, TILEW, TILEH))
         img = pygame.transform.rotate(img, ang_dict[pos])
         d_img.blit(img, img.get_rect())
-        
+
 
 class TileImage(Image):
+
+    def __init__(self, imagename=None, colorkey=None):
+        Image.__init__(self, imagename, colorkey)
+
+    def position(self, (x, y)):
+        self.rect.topleft = ((x * TILEW) + self.x_offset, (y * TILEH) + self.y_offset)
+
+
+class MapTileImage(TileImage):
     
     def __init__(self, imagename=None):
         Image.__init__(self, imagename)
-        

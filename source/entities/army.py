@@ -55,7 +55,6 @@ class Army(Grouping):
     def get_troop(self, type):
         stack = self.stacks[type]
         next = stack.get_next()
-        print next
         return next
 
     def set_side(self, side):

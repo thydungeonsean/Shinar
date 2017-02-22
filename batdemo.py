@@ -39,7 +39,8 @@ while True:
 
     b.run()
     if b.scheduler.phase.name == 'end':
-        handle_input(b.scheduler.phase)
+        b.handle_input()
+        # handle_input(b.scheduler.phase)
         #b.scheduler.phase.end_phase()
 
     pygame.display.update()

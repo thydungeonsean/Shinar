@@ -3,6 +3,9 @@
 class ScreenLayout(object):
 
     def __init__(self):
+
+        self.draw_list = []
+
         self.elements = []
         self.panels = []
 

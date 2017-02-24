@@ -15,12 +15,12 @@ class Button(Element):
     @staticmethod
     def default():
         print 'No function bound to button'
+        
+    def __init__(self, layout, pos, w, h, layer, function='default'):
 
-    def __init__(self, owner, pos, w, h, function='default'):
-
-        self.owner = owner
+        self.owner = None
         self.function = self.set_function(function)
-        Element.__init__(self, pos, w, h)
+        Element.__init__(self, layout, pos, w, h, layer)
 
     def set_color(self):
         return RED
@@ -30,18 +30,6 @@ class Button(Element):
         if function == 'default':
             return Button.default
         return function
-
-    """ button is always placed on an owning panel or element
-    so it overwrites its x, y topleft coord to be relative to
-    it's owner's x, y
-    """
-    @property
-    def x(self):
-        return self.owner.x + self.coord.x
-
-    @property
-    def y(self):
-        return self.owner.y + self.coord.y
 
     def perform_function(self):
         self.function()

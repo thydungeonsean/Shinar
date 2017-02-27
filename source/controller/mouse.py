@@ -31,5 +31,11 @@ class Mouse(object):
         self.state.screen_layout.click(self.position)
         
     def right_click(self):
-        pass
+        self.state.screen_layout.click(self.position)
+
+    def motion(self):
+        self.state.screen_layout.motion(self.position)
+
+    def button_up(self):
+        self.state.screen_layout.button_up()
 

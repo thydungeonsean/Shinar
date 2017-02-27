@@ -34,14 +34,12 @@ def handle_input(phase):
 
 
 while True:
+
     b.render()
     # b.battlefield.grid.draw(screen)
 
     b.run()
-    if b.scheduler.phase.name == 'end':
-        b.handle_input()
-        # handle_input(b.scheduler.phase)
-        #b.scheduler.phase.end_phase()
+    b.handle_input()
 
     pygame.display.update()
     clock.tick(60)

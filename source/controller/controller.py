@@ -11,9 +11,6 @@ class Controller(object):
         'ret': K_RETURN
     }
 
-
-
-
     instance = None
 
     @classmethod
@@ -50,12 +47,18 @@ class Controller(object):
                     pass
 
             elif event.type == MOUSEBUTTONDOWN:
+
                 if event.button == 1:
-                    print event
                     self.mouse.click()
+
                 elif event.button == 3:
-                    print event
                     self.mouse.right_click()
+
+            elif event.type == MOUSEMOTION:
+                self.mouse.motion()
+
+            elif event.type == MOUSEBUTTONUP:
+                self.mouse.button_up()
 
     def key(self, k):
         cls = Controller

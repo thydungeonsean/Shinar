@@ -12,11 +12,15 @@ class Panel(object):
     """
 
     @classmethod
-    def element_panel(cls, layout, (x, y), w, h, layer):
-        instance = cls(layout, (x, y), w, h, layer)
+    def base(cls, layout, pos, w, h):
+        instance = cls(layout, pos, w, h, 0)
+        return instance
+
+    @staticmethod
+    def parent(instance):
         instance.init_element_list()
         return instance
-    
+
     def __init__(self, layout, (x, y), w, h, layer):
 
         self.layout = layout
@@ -31,9 +35,16 @@ class Panel(object):
 
         self.element_list = None
 
+        self.interactive = False
+
         self.needs_redraw = True
         self.color = self.set_color()
         self.image, self.rect = self.set_basic_image()
+
+    def delete(self):
+        self.layout.remove_element(self)
+        print self.layout.element_list
+
 
     def set_color(self):
         return RIVER_BLUE
@@ -48,6 +59,9 @@ class Panel(object):
 
     def reset_pos(self):
         self.rect.topleft = self.x, self.y
+        if self.element_list is not None:
+            for element in self.element_list:
+                element.reset_pos()
 
     @property
     def x(self):
@@ -75,10 +89,12 @@ class Panel(object):
     def attach_element(self, element):
         self.element_list.append(element)
         element.set_owner(self)
+        # element.toggle_redraw = self.toggle_redraw
 
     def set_owner(self, owner):
         self.owner = owner
         self.reset_pos()
+        self.layer = owner.layer + 1
 
     def draw(self, surface):
         if self.needs_redraw:
@@ -86,10 +102,13 @@ class Panel(object):
             self.toggle_redraw()
         if self.element_list is not None:
             for element in self.element_list:
-                element.draw(surface)
+                element.forced_draw(surface)
+
+    def forced_draw(self, surface):  # forced draw - no conditions
+        surface.blit(self.image, self.rect)
 
     def toggle_redraw(self):
         self.needs_redraw = False
 
-    def refresh(self):
+    def refresh_draw(self):
         self.needs_redraw = True

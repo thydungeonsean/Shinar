@@ -3,6 +3,8 @@ import pygame
 from pygame.locals import *
 from source.constants import *
 
+
+from source.controller.controller import Controller
 from source.gui.panel import Panel
 from source.gui.button import Button
 from source.states.screen_layout_collection import ScreenLayoutCollection
@@ -10,11 +12,10 @@ from source.states.screen_layout_collection import ScreenLayoutCollection
 from source.controller.mouse import Mouse
 
 
-def handle_input(mouse):
+class state(object):
 
-    for event in pygame.event.get():
-        if event.type == MOUSEBUTTONDOWN:
-            mouse.click()
+    def __init__(self, screen):
+        self.screen_layout = screen
 
 
 def button_push():
@@ -34,27 +35,28 @@ def demo():
     pygame.init()
 
     os.environ['SDL_VIDEO_CENTERED'] = "TRUE"
-    pygame.display.set_mode((SCREENW, SCREENH))
+    screen = pygame.display.set_mode((SCREENW, SCREENH))
 
     ScreenLayoutCollection.init_battle_layout()
-    mouse = Mouse.get_instance()
+
+    s = state(ScreenLayoutCollection.BATTLE_LAYOUT)
+    control = Controller.get_instance()
+    control.bind_to_state(s)
 
     clock = pygame.time.Clock()
 
     set_elements()
 
+    layout = ScreenLayoutCollection.BATTLE_LAYOUT
+
     while True:
 
-        handle_input(mouse)
+        control.handle_input()
+
+        layout.draw(screen)
 
         pygame.display.update()
         clock.tick(60)
-
-    # pygame.display.update()
-    # pygame.image.save(screen, 'gui.png')
-    #
-    # while pygame.event.wait().type != KEYDOWN:
-    #     clock.tick(60)
 
 
 if __name__ == '__main__':

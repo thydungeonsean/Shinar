@@ -16,11 +16,11 @@ class Button(Element):
     def default():
         print 'No function bound to button'
         
-    def __init__(self, layout, pos, w, h, layer, function='default'):
+    def __init__(self, layout, pos, w, h, function='default'):
 
         self.owner = None
         self.function = self.set_function(function)
-        Element.__init__(self, layout, pos, w, h, layer)
+        Element.__init__(self, layout, pos, w, h, 1)
 
     def set_color(self):
         return RED
@@ -31,5 +31,5 @@ class Button(Element):
             return Button.default
         return function
 
-    def perform_function(self):
+    def perform_function(self, point):
         self.function()

@@ -72,12 +72,12 @@ class Battle(State):
 
         screen = pygame.display.get_surface()
 
-        self.screen_layout.draw(screen)
-
         self.battlefield.draw(self.battle_view)
         self.battle_scale.draw(self.battle_view)
         self.effects.draw(self.battle_view)
         self.battle_view.draw(screen)
+
+        self.screen_layout.draw(screen)
 
     def get_opposing_army(self, troop):
         if troop.side == 'left':

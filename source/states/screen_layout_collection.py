@@ -1,6 +1,6 @@
 from ..gui.screen_layout import ScreenLayout
 from ..gui.panel import Panel
-from ..gui.button import Button
+from ..gui.button import Button, CloseButton
 from ..gui.drag_box import DragBox
 from ..gui.pop_up import PopUp
 
@@ -31,8 +31,9 @@ class ScreenLayoutCollection(object):
         test = Button(cls.BATTLE_LAYOUT, (10, 10), 20, 20, function=make_pop_up)
         right_panel.attach_element(test)
 
-        drag = DragBox(cls.BATTLE_LAYOUT, (650, 20), 50, 50)
-        test2 = Button(cls.BATTLE_LAYOUT, (2, 2), 10, 10, function=make_pop_up)
+        drag = DragBox(cls.BATTLE_LAYOUT, (650, 20), 100, 100)
+        #test2 = Button(cls.BATTLE_LAYOUT, (2, 2), 10, 10, function=make_pop_up)
+        test2 = Button.close_function(Button.from_image('close', cls.BATTLE_LAYOUT, (2, 2), func=make_pop_up), drag)
         drag.attach_element(test2)
 
         cls.BATTLE_LAYOUT.add_elements((top_frame, left_frame, bot_frame, right_frame, right_panel, drag))

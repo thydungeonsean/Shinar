@@ -1,6 +1,7 @@
 from ..entities.coord import Coord
 import pygame
 from ..constants import *
+from ..images.image import GUIImage
 
 
 class Panel(object):
@@ -16,6 +17,16 @@ class Panel(object):
         instance = cls(layout, pos, w, h, 0)
         return instance
 
+    @classmethod
+    def from_image(cls, img_name, layout, pos, layer):
+        img = GUIImage(img_name)
+        w = img.w
+        h = img.h
+        instance = cls(layout, pos, w, h, layer)
+        img.draw(instance.image)
+        return instance
+
+    # decorator methods - call on an instance of class to modify it
     @staticmethod
     def parent(instance):
         instance.init_element_list()
@@ -43,8 +54,9 @@ class Panel(object):
 
     def delete(self):
         self.layout.remove_element(self)
-        print self.layout.element_list
-
+        if self.element_list is not None:
+            for element in self.element_list:
+                self.layout.remove_element(element)
 
     def set_color(self):
         return RIVER_BLUE

@@ -74,7 +74,10 @@ class ScreenLayout(object):
                 self.element_layers[l].append(element)
 
     def remove_element(self, element):
-        self.draw_list.remove(element)
+        try:
+            self.draw_list.remove(element)
+        except ValueError:
+            pass
         l = element.layer
         self.element_layers[l].remove(element)
         self.element_list.remove(element)

@@ -1,5 +1,6 @@
 from element import Element
 from ..constants import RED
+from ..images.image import GUIImage
 
 
 class Button(Element):
@@ -12,9 +13,28 @@ class Button(Element):
     Button needs to be visible to controller objects
     """
 
+    @classmethod
+    def from_image(cls, img_name, layout, pos, func='default'):
+        img = GUIImage(img_name)
+        w = img.w
+        h = img.h
+        instance = cls(layout, pos, w, h, function=func)
+        img.draw(instance.image)
+        return instance
+
     @staticmethod
     def default():
         print 'No function bound to button'
+
+    @staticmethod
+    def close_function(instance, owner):
+        instance.set_owner(owner)
+        instance.perform_function = instance.close_owner
+        return instance
+
+    def close_owner(self, point):
+        self.owner.delete()
+        self.layout.refresh()
         
     def __init__(self, layout, pos, w, h, function='default'):
 
@@ -33,3 +53,16 @@ class Button(Element):
 
     def perform_function(self, point):
         self.function()
+
+
+class CloseButton(Button):
+
+
+
+
+    def __init__(self, owner, layout, pos, w, h):
+        Button.__init__(self, layout, pos, w, h)
+        self.owner = owner
+        self.perform_function = self.close_owner
+
+

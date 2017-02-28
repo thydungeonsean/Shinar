@@ -27,6 +27,14 @@ class Image(object):
             self.set_colorkey(colorkey)
         self.rect = self.set_dims()
 
+    @property
+    def w(self):
+        return self.rect.w
+
+    @property
+    def h(self):
+        return self.rect.h
+
     def set_dims(self):
 
         rect = self.image.get_rect()
@@ -78,3 +86,12 @@ class Image(object):
     def set_colorkey(self, color=WHITE):
 
         self.image.set_colorkey(color)
+
+
+class GUIImage(Image):
+
+    def __init__(self, imagename):
+        Image.__init__(self, imagename)
+
+    def set_asset_path(self):
+        return GUIPATH

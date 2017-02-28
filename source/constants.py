@@ -17,6 +17,7 @@ def scale_tuple((x, y)):
 MAPPATH = '\\..\\assets\\maps\\'
 TILEPATH = '\\..\\assets\\tiles\\'
 SPRITEPATH = '\\..\\assets\\sprites\\'
+GUIPATH = '\\..\\assets\\gui\\'
 
 
 SCREENW = scale(400)

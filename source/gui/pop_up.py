@@ -4,7 +4,7 @@ from element import Element
 class PopUp(Element):
 
     def __init__(self, layout, pos, w, h):
-        Element.__init__(self, layout, pos, w, h, 4)
+        Element.__init__(self, layout, pos, w, h, 6)
 
     def motion(self, point):
         self.delete()

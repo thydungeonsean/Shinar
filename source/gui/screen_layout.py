@@ -10,7 +10,9 @@ class ScreenLayout(object):
                                 1: [],
                                 2: [],
                                 3: [],
-                                4: []
+                                4: [],
+                                5: [],
+                                6: []
                                }
         self.element_list = []
 
@@ -105,6 +107,10 @@ class ScreenLayout(object):
     def button_up(self):
         for element in self.element_list:
             element.button_up()
+
+    def hover(self, point):
+        for element in self.element_list:
+            element.hover(point)
 
     # other
     def refresh(self):

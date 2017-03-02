@@ -32,5 +32,8 @@ class Element(Panel):
     def button_up(self):
         pass
 
+    def hover(self, point):
+        pass
+
     def perform_function(self, point):
         raise NotImplementedError

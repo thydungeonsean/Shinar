@@ -7,7 +7,9 @@ class Mouse(object):
     """ Object wrapper for the pygame.mouse functions """
 
     instance = None
-    
+
+    HOVERDELAY = 20
+
     @classmethod
     def get_instance(cls):
         if cls.instance is None:
@@ -16,6 +18,7 @@ class Mouse(object):
         
     def __init__(self):
         self.state = None
+        self.hover_count = 0
 
     def bind_to_state(self, state):
         self.state = state
@@ -38,4 +41,12 @@ class Mouse(object):
 
     def button_up(self):
         self.state.screen_layout.button_up()
+
+    def hover(self):
+        self.hover_count += 1
+        if self.hover_count >= Mouse.HOVERDELAY:
+            self.state.screen_layout.hover(self.position)
+
+    def reset_hover(self):
+        self.hover_count = 0
 

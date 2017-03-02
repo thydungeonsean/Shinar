@@ -54,6 +54,10 @@ class Button(Element):
     def perform_function(self, point):
         self.function()
 
+    def hover(self, point):
+        if self.point_is_over(point):
+            pass
+
 
 class CloseButton(Button):
 

@@ -34,6 +34,8 @@ class Controller(object):
 
     def handle_input(self):
 
+        mouse_moved = False
+
         for event in pygame.event.get():
 
             if event.type == QUIT:
@@ -55,10 +57,16 @@ class Controller(object):
                     self.mouse.right_click()
 
             elif event.type == MOUSEMOTION:
+                mouse_moved = True
                 self.mouse.motion()
 
             elif event.type == MOUSEBUTTONUP:
                 self.mouse.button_up()
+
+        if not mouse_moved:
+            self.mouse.hover()
+        else:
+            self.mouse.reset_hover()
 
     def key(self, k):
         cls = Controller

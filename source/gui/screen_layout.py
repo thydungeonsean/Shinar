@@ -15,6 +15,7 @@ class ScreenLayout(object):
                                 6: []
                                }
         self.element_list = []
+        self.inactive_elements = {}
 
     def draw(self, surface):
         for element in self.draw_list:
@@ -33,6 +34,7 @@ class ScreenLayout(object):
     def add_element(self, element, set_list=True):
         self.add_to_draw_list(element)
         self.add_to_layers(element)
+        element.set_layout(self)
         if set_list:
             self.element_list = self.set_element_list()
 
@@ -41,6 +43,15 @@ class ScreenLayout(object):
             self.add_element(element, set_list=False)
 
         self.element_list = self.set_element_list()
+
+    def archive_element(self, element):
+        # only for persistent panels
+        key = element.id_key
+        self.inactive_elements[key] = element
+
+    def archive_elements(self, elements):
+        for element in elements:
+            self.archive_element(element)
 
     def add_to_draw_list(self, new_element):
         # order not important if list empty
@@ -58,7 +69,7 @@ class ScreenLayout(object):
         for element in self.draw_list:
             if element.layer <= target_layer:
                 i += 1
-            if element.layer == target_layer:
+            if element.layer > target_layer:
                 self.draw_list.insert(i, new_element)
                 return
         self.draw_list.append(new_element)

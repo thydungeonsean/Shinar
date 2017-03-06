@@ -1,5 +1,6 @@
 from panel import Panel
 import pygame
+from ..constants import LT_GREY
 
 
 class Element(Panel):
@@ -8,8 +9,8 @@ class Element(Panel):
     Element is visible to controller and can be interacted with
     """
 
-    def __init__(self, layout, pos, w, h, layer):
-        Panel.__init__(self, layout, pos, w, h, layer)
+    def __init__(self, pos, w, h, layer, layout=None):
+        Panel.__init__(self, pos, w, h, layer, layout=layout)
         self.interactive = True
 
     def point_is_over(self, (px, py)):
@@ -37,3 +38,26 @@ class Element(Panel):
 
     def perform_function(self, point):
         raise NotImplementedError
+
+
+class PersistentPanel(Element):
+
+    def __init__(self, pos, w, h, layer, id_key, layout=None):
+        Element.__init__(self, pos, w, h, layer, layout=layout)
+        self.id_key = id_key
+        self.persistent = True
+
+    def delete(self):
+
+        self.layout.remove_element(self)
+        if self.element_list is not None:
+            for element in self.element_list:
+                self.layout.remove_element(element)
+
+        self.layout.archive_element(self)
+
+    def set_color(self):
+        return LT_GREY
+
+    def perform_function(self, point):
+        pass

@@ -4,9 +4,9 @@ from ..constants import FERTILE_GREEN
 
 class DragBox(Element):
 
-    def __init__(self, layout, pos, w, h):
-        Element.__init__(self, layout, pos, w, h, 4)
-        self.parent(self)
+    def __init__(self, pos, w, h, layout=None):
+        Element.__init__(self, pos, w, h, 4, layout=layout)
+        self.parent()
         self.state = 0
         self.anchor_x = 0
         self.anchor_y = 0

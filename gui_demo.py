@@ -1,15 +1,10 @@
 import os
 import pygame
-from pygame.locals import *
 from source.constants import *
 
-
+from source.gui.pop_up import PopUp
 from source.controller.controller import Controller
-from source.gui.panel import Panel
-from source.gui.button import Button
 from source.states.screen_layout_collection import ScreenLayoutCollection
-
-from source.controller.mouse import Mouse
 
 
 class state(object):
@@ -48,6 +43,12 @@ def demo():
     set_elements()
 
     layout = ScreenLayoutCollection.BATTLE_LAYOUT
+
+    # bastardized way to simulate refreshing screen
+    clear_panel = PopUp((BATTLEFIELD_FRAME_W, BATTLEFIELD_FRAME_W), BATTLEFIELD_W, BATTLEFIELD_H)
+    clear_panel.image.fill(BLACK)
+    clear_panel.layer = 0
+    layout.add_to_draw_list(clear_panel)
 
     while True:
 

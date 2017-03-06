@@ -13,8 +13,8 @@ class Panel(object):
     """
 
     @classmethod
-    def base(cls, layout, pos, w, h):
-        instance = cls(layout, pos, w, h, 0)
+    def base(cls, pos, w, h, layout=None):
+        instance = cls(pos, w, h, 0, layout=layout)
         return instance
 
     @classmethod
@@ -26,13 +26,12 @@ class Panel(object):
         img.draw(instance.image)
         return instance
 
-    # decorator methods - call on an instance of class to modify it
-    @staticmethod
-    def parent(instance):
-        instance.init_element_list()
-        return instance
+    # decorator methods - call on construction
+    def parent(self):
+        self.init_element_list()
+        return self
 
-    def __init__(self, layout, (x, y), w, h, layer):
+    def __init__(self, (x, y), w, h, layer, layout=None):
 
         self.layout = layout
 
@@ -43,14 +42,20 @@ class Panel(object):
         self.layer = layer
 
         self.owner = None
-
         self.element_list = None
 
         self.interactive = False
+        self.persistent = False
 
         self.needs_redraw = True
         self.color = self.set_color()
         self.image, self.rect = self.set_basic_image()
+
+    def set_layout(self, layout):
+        self.layout = layout
+        if self.element_list is not None:
+            for element in self.element_list:
+                element.set_layout(layout)
 
     def delete(self):
         self.layout.remove_element(self)
@@ -68,6 +73,10 @@ class Panel(object):
         rect = image.get_rect()
         rect.topleft = self.x, self.y
         return image, rect
+
+    def move(self, (x, y)):
+        self.coord.set((x, y))
+        self.reset_pos()
 
     def reset_pos(self):
         self.rect.topleft = self.x, self.y
@@ -101,7 +110,12 @@ class Panel(object):
     def attach_element(self, element):
         self.element_list.append(element)
         element.set_owner(self)
-        # element.toggle_redraw = self.toggle_redraw
+        if self.layout is not None:
+            element.set_layout(self.layout)
+
+    def attach_elements(self, elements):
+        for element in elements:
+            self.attach_element(element)
 
     def set_owner(self, owner):
         self.owner = owner

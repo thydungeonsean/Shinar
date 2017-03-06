@@ -18,6 +18,7 @@ MAPPATH = '\\..\\assets\\maps\\'
 TILEPATH = '\\..\\assets\\tiles\\'
 SPRITEPATH = '\\..\\assets\\sprites\\'
 GUIPATH = '\\..\\assets\\gui\\'
+FONTPATH = '\\..\\assets\\font\\'
 
 
 SCREENW = scale(400)
@@ -43,7 +44,9 @@ BATTLEGRID_SQUARE_H = scale(26)
 BATTLEFIELD_X_MARGIN = (BATTLEFIELD_W - BATTLEGRID_W * BATTLEGRID_SQUARE_W)/2
 BATTLEFIELD_Y_MARGIN = ((BATTLEFIELD_H - BATTLEGRID_H * BATTLEGRID_SQUARE_H)/2)
 
+COMMAND_PANEL_W = SCREENW - (2 * BATTLEFIELD_FRAME_W + BATTLEFIELD_W)
 
+COMMAND_PANEL_Y = scale(50)
 
 FRAMES_PER_TURN = 120
 
@@ -51,6 +54,7 @@ FRAMES_PER_TURN = 120
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+LT_GREY = (100, 100, 100)
 DK_GREY = (66, 66, 66)
 
 RED = (255, 0, 0)

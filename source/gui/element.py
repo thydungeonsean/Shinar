@@ -9,8 +9,8 @@ class Element(Panel):
     Element is visible to controller and can be interacted with
     """
 
-    def __init__(self, pos, w, h, layer, layout=None):
-        Panel.__init__(self, pos, w, h, layer, layout=layout)
+    def __init__(self, pos, w, h, layer):
+        Panel.__init__(self, pos, w, h, layer)
         self.interactive = True
 
     def point_is_over(self, (px, py)):
@@ -20,7 +20,7 @@ class Element(Panel):
 
     def click(self, point):
         if self.point_is_over(point):
-            self.perform_function(point)
+            self.perform_function(self)
         else:
             return 0
 
@@ -36,14 +36,14 @@ class Element(Panel):
     def hover(self, point):
         pass
 
-    def perform_function(self, point):
+    def perform_function(self, dummy):
         raise NotImplementedError
 
 
 class PersistentPanel(Element):
 
-    def __init__(self, pos, w, h, layer, id_key, layout=None):
-        Element.__init__(self, pos, w, h, layer, layout=layout)
+    def __init__(self, pos, w, h, layer, id_key):
+        Element.__init__(self, pos, w, h, layer)
         self.id_key = id_key
         self.persistent = True
 
@@ -59,5 +59,5 @@ class PersistentPanel(Element):
     def set_color(self):
         return LT_GREY
 
-    def perform_function(self, point):
+    def perform_function(self, dummy):
         pass

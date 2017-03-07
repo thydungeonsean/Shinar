@@ -4,25 +4,30 @@ from menu_grid import MenuGrid
 from ..constants import COMMAND_PANEL_W, scale
 
 
+#class MainCommandMenu()
+
+
 class CommandMenu(PersistentPanel):
 
     GAP = scale(5)
 
-    def __init__(self, pos, layer, id_key, num_buttons, backbutton=True, layout=None):
+    def __init__(self, pos, layer, id_key, num_buttons, title, backbutton=True):
 
+        self.title = title
         self.num_buttons = num_buttons
-        w, h = self.set_dimensions()
+        w, h = self.set_dimensions(backbutton)
 
-        PersistentPanel.__init__(self, pos, w, h, layer, id_key, layout=layout)
+        PersistentPanel.__init__(self, pos, w, h, layer, id_key)
         self.menu_grid = MenuGrid(self, MenuButton.COMMAND_W, MenuButton.COMMAND_H)
 
         self.parent()
         if backbutton:
             self.attach_back_button()
 
-    def set_dimensions(self):
-        h = self.num_buttons * MenuButton.COMMAND_H + (((self.num_buttons+3) * CommandMenu.GAP) +
-                                                       CloseButton.BACK_BUTTON_H)
+    def set_dimensions(self, backbutton):
+        h = self.num_buttons * MenuButton.COMMAND_H + ((self.num_buttons+2) * CommandMenu.GAP)
+        if backbutton:
+            h += CommandMenu.GAP + CloseButton.BACK_BUTTON_H
 
         return COMMAND_PANEL_W, h
 

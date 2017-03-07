@@ -2,6 +2,7 @@ from element import Element
 from ..constants import RED, scale, COMMAND_PANEL_W
 from ..images.image import GUIImage
 from font import MenuFont
+from functions.function_archive import function_archive
 
 
 class Button(Element):
@@ -40,36 +41,35 @@ class Button(Element):
         return instance
 
     @staticmethod
-    def default():
+    def default(self):
         print 'No function bound to button'
 
-    @staticmethod
-    def close_function(instance, owner):
-        instance.set_owner(owner)
-        instance.perform_function = instance.close_owner
-        return instance
+    # @staticmethod
+    # def close_function(instance, owner):
+    #     instance.set_owner(owner)
+    #     instance.perform_function = instance.close_owner
+    #     return instance
 
-    def close_owner(self, point):
-        self.owner.delete()
-        self.layout.refresh()
+    # def close_owner(self, point):
+    #     self.owner.delete()
+    #     self.layout.refresh()
         
-    def __init__(self, pos, w, h, function='default', layout=None):
+    def __init__(self, pos, w, h, function=None):
 
         self.owner = None
-        self.function = self.set_function(function)
-        Element.__init__(self, pos, w, h, 1, layout=layout)
+        self.perform_function = self.set_function(function)
+        Element.__init__(self, pos, w, h, 1)
 
     def set_color(self):
         return RED
 
-    @staticmethod
-    def set_function(function):
+    def set_function(self, function):
         if function is None:
             return Button.default
-        return function
+        return self.get_archived_function(function)
 
-    def perform_function(self, point):
-        self.function()
+    def perform_function(self):
+        pass
 
     def hover(self, point):
         if self.point_is_over(point):
@@ -78,6 +78,9 @@ class Button(Element):
     def draw_text(self, text):
         f = MenuFont.get_instance()
         f.draw(self.image, (scale(2), scale(-4)), text)
+
+    def get_archived_function(self, key):
+        return function_archive[key]
 
 
 class CloseButton(Button):
@@ -88,15 +91,15 @@ class CloseButton(Button):
     CLOSE_BUTTON_W = scale(25)
     CLOSE_BUTTON_H = scale(25)
 
-    def __init__(self, owner, pos, w, h, layout=None):
-        Button.__init__(self, pos, w, h, layout=layout)
+    def __init__(self, owner, pos, w, h):
+        Button.__init__(self, pos, w, h)
         self.owner = owner
-        self.perform_function = self.close_owner
+        self.perform_function = self.get_archived_function('back_command')
 
 
 class MenuButton(Button):
 
-    def __init__(self, text, function=None, layout=None):
+    def __init__(self, text, function=None):
 
-        Button.__init__(self, (0, 0), Button.COMMAND_W, Button.COMMAND_H, function=function, layout=layout)
+        Button.__init__(self, (0, 0), Button.COMMAND_W, Button.COMMAND_H, function=function)
         self.draw_text(text)

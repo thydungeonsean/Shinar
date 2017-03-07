@@ -13,16 +13,16 @@ class Panel(object):
     """
 
     @classmethod
-    def base(cls, pos, w, h, layout=None):
-        instance = cls(pos, w, h, 0, layout=layout)
+    def base(cls, pos, w, h):
+        instance = cls(pos, w, h, 0)
         return instance
 
     @classmethod
-    def from_image(cls, img_name, layout, pos, layer):
+    def from_image(cls, img_name, pos, layer):
         img = GUIImage(img_name)
         w = img.w
         h = img.h
-        instance = cls(layout, pos, w, h, layer)
+        instance = cls(pos, w, h, layer)
         img.draw(instance.image)
         return instance
 
@@ -31,9 +31,7 @@ class Panel(object):
         self.init_element_list()
         return self
 
-    def __init__(self, (x, y), w, h, layer, layout=None):
-
-        self.layout = layout
+    def __init__(self, (x, y), w, h, layer):
 
         self.coord = Coord(x, y)
         self.w = w
@@ -43,6 +41,7 @@ class Panel(object):
 
         self.owner = None
         self.element_list = None
+        self.layout = None
 
         self.interactive = False
         self.persistent = False
@@ -51,17 +50,20 @@ class Panel(object):
         self.color = self.set_color()
         self.image, self.rect = self.set_basic_image()
 
+    # setters
     def set_layout(self, layout):
         self.layout = layout
         if self.element_list is not None:
             for element in self.element_list:
                 element.set_layout(layout)
 
-    def delete(self):
-        self.layout.remove_element(self)
-        if self.element_list is not None:
-            for element in self.element_list:
-                self.layout.remove_element(element)
+    def set_owner(self, owner):
+        self.owner = owner
+        self.reset_pos()
+        self.layer = owner.layer + 1
+
+    def init_element_list(self):
+        self.element_list = []
 
     def set_color(self):
         return RIVER_BLUE
@@ -74,16 +76,7 @@ class Panel(object):
         rect.topleft = self.x, self.y
         return image, rect
 
-    def move(self, (x, y)):
-        self.coord.set((x, y))
-        self.reset_pos()
-
-    def reset_pos(self):
-        self.rect.topleft = self.x, self.y
-        if self.element_list is not None:
-            for element in self.element_list:
-                element.reset_pos()
-
+    # positional methods and properties
     @property
     def x(self):
         return self.coord.x + self.owner_x
@@ -104,9 +97,17 @@ class Panel(object):
             return 0
         return self.owner.y
 
-    def init_element_list(self):
-        self.element_list = []
-        
+    def move(self, (x, y)):
+        self.coord.set((x, y))
+        self.reset_pos()
+
+    def reset_pos(self):
+        self.rect.topleft = self.x, self.y
+        if self.element_list is not None:
+            for element in self.element_list:
+                element.reset_pos()
+
+    # membership methods
     def attach_element(self, element):
         self.element_list.append(element)
         element.set_owner(self)
@@ -117,11 +118,13 @@ class Panel(object):
         for element in elements:
             self.attach_element(element)
 
-    def set_owner(self, owner):
-        self.owner = owner
-        self.reset_pos()
-        self.layer = owner.layer + 1
+    def delete(self):
+        self.layout.remove_element(self)
+        if self.element_list is not None:
+            for element in self.element_list:
+                self.layout.remove_element(element)
 
+    # draw methods
     def draw(self, surface):
         if self.needs_redraw:
             surface.blit(self.image, self.rect)

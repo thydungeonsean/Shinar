@@ -6,6 +6,9 @@ class BattlePhase(object):
         self.owner = owner  # battle scheduler ref
         self.name = name
 
+    def init(self):  # run any commands that should happen when phase starts
+        pass
+
     def run(self):
         pass
 
@@ -18,4 +21,4 @@ class BattlePhase(object):
         pass
 
     def get_next_phase(self):
-        return 'next phase'
+        raise NotImplementedError

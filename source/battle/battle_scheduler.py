@@ -4,7 +4,7 @@ from engagement_manager import EngagementManager
 from phases.action_phase import ActionPhase
 from phases.engagement_phase import EngagementPhase
 from phases.aftermath_phase import AftermathPhase
-from phases.end_phase import EndPhase
+from phases.command_phase import CommandPhase
 
 
 class BattleScheduler(object):
@@ -29,10 +29,11 @@ class BattleScheduler(object):
         self.end_tick = FRAMES_PER_TURN
 
         self.phase = None
-        self.phases = {'action': ActionPhase(self),
+        self.phases = {'command': CommandPhase(self),
+                       'action': ActionPhase(self),
                        'engagement': EngagementPhase(self),
                        'aftermath': AftermathPhase(self),
-                       'end': EndPhase(self)}
+                       }
 
         self.ready_troops = []
         self.action_queue = []
@@ -43,7 +44,7 @@ class BattleScheduler(object):
         UnitStateArchive.init_battle(battle)
         self.engagements = EngagementManager.get_instance()
 
-        self.phase = self.phases['action']
+        self.phase = self.phases['command']
 
         for troop in self.battle.left_army.troops:
             self.ready_troops.append(troop)
@@ -55,6 +56,7 @@ class BattleScheduler(object):
 
     def next_phase(self, phase):
         self.phase = self.phases[phase]
+        self.phase.init()
 
     def complete_action(self, action, ready=True):
 

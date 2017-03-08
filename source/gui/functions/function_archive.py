@@ -26,8 +26,9 @@ def switch_panel(self, id_key):
     close_owner_panel(self)
 
 # battle layout functions
+#######################################
 
-
+# panel opening functions
 def open_command_panel(self):
     switch_panel(self, 'commands')
 
@@ -51,6 +52,10 @@ def open_archer_panel(self):
 def open_chariot_panel(self):
     switch_panel(self, 'chariot_commands')
 
+# main button functions
+def end_command_phase(self):
+    command_phase = self.layout.state.scheduler.phase
+    command_phase.end_phase()
 
 # test
 def make_pop_up(self):
@@ -68,5 +73,6 @@ function_archive = {
     'open_infantry': open_infantry_panel,
     'open_archer': open_archer_panel,
     'open_chariot': open_chariot_panel,
-    'make_pop_up': make_pop_up
+    'make_pop_up': make_pop_up,
+    'end_command_phase': end_command_phase
 }

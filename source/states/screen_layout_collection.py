@@ -31,7 +31,7 @@ class ScreenLayoutCollection(object):
         right_panel = Panel.base((2 * BATTLEFIELD_FRAME_W + BATTLEFIELD_W, 0), COMMAND_PANEL_W, SCREENH).parent()
         main_menu_button = MenuButton('MAIN MENU', function='make_pop_up')
         main_menu_button.move((MAIN_MENU_BUTTON_X, MAIN_MENU_BUTTON_Y))
-        next_turn_button = MenuButton('NEXT TURN')
+        next_turn_button = MenuButton('NEXT TURN', function='end_command_phase')
         next_turn_button.move((NEXT_TURN_BUTTON_X, NEXT_TURN_BUTTON_Y))
         right_panel.attach_elements((main_menu_button, next_turn_button))
 

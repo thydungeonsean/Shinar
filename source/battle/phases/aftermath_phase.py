@@ -14,4 +14,4 @@ class AftermathPhase(battle_phase.BattlePhase):
             self.end_phase()
 
     def get_next_phase(self):
-        return 'end'
+        return 'command'

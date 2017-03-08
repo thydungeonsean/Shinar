@@ -4,6 +4,8 @@ class ScreenLayout(object):
 
     def __init__(self):
 
+        self.state = None
+
         self.draw_list = []
         self.element_layers = {
                                 0: [],
@@ -16,6 +18,12 @@ class ScreenLayout(object):
                                }
         self.element_list = []
         self.inactive_elements = {}
+
+    def init_state(self, state):
+        self.state = state
+
+    def deinit_state(self):
+        self.state = None
 
     def draw(self, surface):
         for element in self.draw_list:

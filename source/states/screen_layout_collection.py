@@ -2,7 +2,7 @@ from ..gui.screen_layout import ScreenLayout
 from ..gui.panel import Panel
 from ..gui.command_menu import CommandMenu
 from ..gui.button import Button, CloseButton, MenuButton
-from ..gui.drag_box import DragBox
+from ..gui.drag_box import DragBox, FPSBox
 from ..gui.pop_up import PopUp
 
 from ..constants import *
@@ -76,28 +76,12 @@ class ScreenLayoutCollection(object):
         # tests
 
         drag = DragBox((650, 20), 100, 100)
+        fps = FPSBox((750, 550), 50, 50)
         # test2 = Button(cls.BATTLE_LAYOUT, (2, 2), 10, 10, function=make_pop_up)
         # test2 = Button.close_function(Button.from_image('close', cls.BATTLE_LAYOUT, (2, 2), func=make_pop_up), drag)
         button2 = MenuButton('Button', function='make_pop_up')
         drag.attach_element(button2)
 
-        cls.BATTLE_LAYOUT.add_elements((top_frame, left_frame, bot_frame, right_frame, right_panel, command_menu))
+        cls.BATTLE_LAYOUT.add_elements((top_frame, left_frame, bot_frame, right_frame, right_panel, command_menu, fps))
         cls.BATTLE_LAYOUT.archive_elements((disposition_commands_panel, general_commands_panel, infantry_command_panel,
                                             archer_command_panel, chariot_command_panel))
-
-
-def make_pop_up():
-
-    new = PopUp((40, 40), 100, 100)
-    ScreenLayoutCollection.BATTLE_LAYOUT.add_element(new)
-
-
-def open_gen_com():
-    self = ScreenLayoutCollection.BATTLE_LAYOUT
-    try:
-        panel = self.inactive_elements['general_commands']
-        del self.inactive_elements['general_commands']
-        self.add_element(panel)
-        panel.refresh_draw()
-    except KeyError:
-        print 'already open'

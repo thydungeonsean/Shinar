@@ -1,6 +1,7 @@
 import os
 import pygame
 from pygame.locals import *
+from source.states.clock import Clock
 from tools.rand_dist import rand_dist
 from source.constants import *
 
@@ -20,7 +21,7 @@ blue = Army('b', YELLOW, 2, 2, 4)
 
 b = battle.Battle('s', red, blue)
 
-clock = pygame.time.Clock()
+clock = Clock.get_instance()
 
 
 def handle_input(phase):

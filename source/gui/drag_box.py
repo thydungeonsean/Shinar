@@ -1,5 +1,7 @@
 from element import Element
-from ..constants import FERTILE_GREEN
+from ..constants import FERTILE_GREEN, scale
+from font import MenuFont
+from ..controller.mouse import Mouse
 
 
 class DragBox(Element):
@@ -14,7 +16,8 @@ class DragBox(Element):
     def set_color(self):
         return FERTILE_GREEN
 
-    def perform_function(self, (mx, my)):
+    def perform_function(self, dummy):
+        mx, my = Mouse.get_instance().position
         if self.state == 0:
             self.state = 1
             self.anchor_x = self.x - mx
@@ -37,3 +40,34 @@ class DragBox(Element):
 
     def toggle_redraw(self):
         pass
+
+
+class FPSBox(DragBox):
+
+    def __init__(self, pos, w, h):
+        DragBox.__init__(self, pos, w, h)
+        self.fps = 0
+
+    def draw(self, surface):
+        if self.needs_redraw:
+            draw = self.check_fps()
+            if draw:
+                self.draw_fps()
+            surface.blit(self.image, self.rect)
+            self.toggle_redraw()
+
+    def check_fps(self):
+        old_fps = self.fps
+        self.fps = self.layout.state.clock.get_fps()
+        if old_fps == self.fps:
+            return False
+        return True
+
+    def draw_fps(self):
+        self.image.fill(self.color)
+        self.draw_text(str(self.fps))
+
+    def draw_text(self, text):
+        f = MenuFont.get_instance()
+        f.draw(self.image, (scale(2), scale(-4)), text)
+

@@ -1,4 +1,5 @@
 from ..controller.controller import Controller
+from clock import Clock
 
 
 class State(object):
@@ -7,6 +8,8 @@ class State(object):
         self.main = main
         self.controller = Controller.get_instance()
         self.screen_layout = None
+
+        self.clock = Clock.get_instance()
 
     def init_state(self):
         raise NotImplementedError

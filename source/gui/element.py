@@ -42,10 +42,12 @@ class Element(Panel):
 
 class PersistentPanel(Element):
 
-    def __init__(self, pos, w, h, layer, id_key):
+    def __init__(self, pos, w, h, layer, id_key, **kwargs):
         Element.__init__(self, pos, w, h, layer)
         self.id_key = id_key
         self.persistent = True
+        self.tag = kwargs.get('tag')
+        print self.tag
 
     def delete(self):
 

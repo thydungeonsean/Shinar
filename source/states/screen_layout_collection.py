@@ -36,7 +36,8 @@ class ScreenLayoutCollection(object):
         right_panel.attach_elements((main_menu_button, next_turn_button))
 
         # master command menu
-        command_menu = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'commands', 5, 'COMMANDS', backbutton=False)
+        command_menu = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'commands', 5, 'COMMANDS', backbutton=False,
+                                   tag='command').bind_layout(cls.BATTLE_LAYOUT)
         command_menu.attach_menu_buttons((MenuButton('DISPOSITION', function='open_disp'),
                                           MenuButton('GENERAL', function='open_general'),
                                           MenuButton('INFANTRY', function='open_infantry'),
@@ -46,27 +47,32 @@ class ScreenLayoutCollection(object):
         # command menus
         # disposition
         disposition_commands_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'disposition_commands', 3,
-                                                 'DISPOSITION')
+                                                 'DISPOSITION', tag='command').bind_layout(cls.BATTLE_LAYOUT)
+
         disposition_commands_panel.attach_menu_buttons((MenuButton('INFANTRY'),
                                                         MenuButton('ARCHER'),
                                                         MenuButton('CHARIOT')))
 
         # general
-        general_commands_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'general_commands', 3, 'GENERAL')
+        general_commands_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'general_commands', 3, 'GENERAL',
+                                             tag='command').bind_layout(cls.BATTLE_LAYOUT)
         general_commands_panel.attach_menu_buttons((MenuButton('MANEUVER'),
                                                     MenuButton('RALLY'),
                                                     MenuButton('REGROUP')))
         # infantry
-        infantry_command_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'infantry_commands', 2, 'INFANTRY')
+        infantry_command_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'infantry_commands', 2, 'INFANTRY',
+                                             tag='command').bind_layout(cls.BATTLE_LAYOUT)
         infantry_command_panel.attach_menu_buttons((MenuButton('CHARGE'),
                                                     MenuButton('REFORM')))
 
         # archer
-        archer_command_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'archer_commands', 1, 'ARCHER')
+        archer_command_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'archer_commands', 1, 'ARCHER',
+                                           tag='command').bind_layout(cls.BATTLE_LAYOUT)
         archer_command_panel.attach_menu_buttons((MenuButton('FOCUS'),))
 
         # chariot
-        chariot_command_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'chariot_commands', 1, 'CHARIOT')
+        chariot_command_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'chariot_commands', 1, 'CHARIOT',
+                                            tag='command').bind_layout(cls.BATTLE_LAYOUT)
         chariot_command_panel.attach_menu_buttons((MenuButton('RAID'),))
 
         # main menu
@@ -82,6 +88,6 @@ class ScreenLayoutCollection(object):
         button2 = MenuButton('Button', function='make_pop_up')
         drag.attach_element(button2)
 
-        cls.BATTLE_LAYOUT.add_elements((top_frame, left_frame, bot_frame, right_frame, right_panel, command_menu, fps))
-        cls.BATTLE_LAYOUT.archive_elements((disposition_commands_panel, general_commands_panel, infantry_command_panel,
-                                            archer_command_panel, chariot_command_panel))
+        cls.BATTLE_LAYOUT.add_elements((top_frame, left_frame, bot_frame, right_frame, right_panel, fps))
+        cls.BATTLE_LAYOUT.archive_elements((command_menu, disposition_commands_panel, general_commands_panel,
+                                            infantry_command_panel, archer_command_panel, chariot_command_panel))

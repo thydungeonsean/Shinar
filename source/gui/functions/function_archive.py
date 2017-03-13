@@ -1,16 +1,14 @@
 from ..pop_up import PopUp
 
 
-# Funciton Archive
+# Function Archive
 
 
 # generic functions
 def open_panel(self, id_key):
     try:
-        panel = self.layout.inactive_elements[id_key]
-        del self.layout.inactive_elements[id_key]
-        self.layout.add_element(panel)
-        panel.refresh_draw()
+        self.layout.open_panel(id_key)
+
     except KeyError:
         raise Exception('Already Open')
 
@@ -27,6 +25,7 @@ def switch_panel(self, id_key):
 
 # battle layout functions
 #######################################
+
 
 # panel opening functions
 def open_command_panel(self):
@@ -52,10 +51,12 @@ def open_archer_panel(self):
 def open_chariot_panel(self):
     switch_panel(self, 'chariot_commands')
 
+
 # main button functions
 def end_command_phase(self):
     command_phase = self.layout.state.scheduler.phase
     command_phase.end_phase()
+
 
 # test
 def make_pop_up(self):

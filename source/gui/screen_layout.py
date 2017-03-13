@@ -17,7 +17,7 @@ class ScreenLayout(object):
                                 6: []
                                }
         self.element_list = []
-        self.inactive_elements = {}
+        self.persistent_elements = {}
 
     def init_state(self, state):
         self.state = state
@@ -43,6 +43,8 @@ class ScreenLayout(object):
         self.add_to_draw_list(element)
         self.add_to_layers(element)
         element.set_layout(self)
+        if element.persistent:
+            self.archive_element(element)
         if set_list:
             self.element_list = self.set_element_list()
 
@@ -55,11 +57,18 @@ class ScreenLayout(object):
     def archive_element(self, element):
         # only for persistent panels
         key = element.id_key
-        self.inactive_elements[key] = element
+        self.persistent_elements[key] = element
 
     def archive_elements(self, elements):
         for element in elements:
             self.archive_element(element)
+
+    def close_tagged_panels(self, tag):
+        tagged = filter(lambda x: x.tag == tag, self.persistent_elements.values())
+        for element in tagged:
+            if element in self.element_list:
+                element.delete()
+        self.refresh()
 
     def add_to_draw_list(self, new_element):
         # order not important if list empty
@@ -135,3 +144,8 @@ class ScreenLayout(object):
     def refresh(self):
         for element in self.draw_list:
             element.refresh_draw()
+
+    def open_panel(self, id_key):
+        panel = self.persistent_elements[id_key]
+        self.add_element(panel)
+        panel.refresh_draw()

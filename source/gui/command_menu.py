@@ -11,13 +11,13 @@ class CommandMenu(PersistentPanel):
 
     GAP = scale(5)
 
-    def __init__(self, pos, layer, id_key, num_buttons, title, backbutton=True):
+    def __init__(self, pos, layer, id_key, num_buttons, title, backbutton=True, **kwargs):
 
         self.title = title
         self.num_buttons = num_buttons
         w, h = self.set_dimensions(backbutton)
 
-        PersistentPanel.__init__(self, pos, w, h, layer, id_key)
+        PersistentPanel.__init__(self, pos, w, h, layer, id_key, **kwargs)
         self.menu_grid = MenuGrid(self, MenuButton.COMMAND_W, MenuButton.COMMAND_H)
 
         self.parent()

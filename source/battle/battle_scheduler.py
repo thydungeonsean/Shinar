@@ -29,7 +29,8 @@ class BattleScheduler(object):
         self.end_tick = FRAMES_PER_TURN
 
         self.phase = None
-        self.phases = {'command': CommandPhase(self),
+        self.phases = {'left_command': CommandPhase.left_army(self),
+                       'right_command': CommandPhase.right_army(self),
                        'action': ActionPhase(self),
                        'engagement': EngagementPhase(self),
                        'aftermath': AftermathPhase(self),
@@ -44,12 +45,17 @@ class BattleScheduler(object):
         UnitStateArchive.init_battle(battle)
         self.engagements = EngagementManager.get_instance()
 
-        self.phase = self.phases['command']
+        left = self.battle.left_army.player
+        right = self.battle.right_army.player
+        self.phases['left_command'].set_player(left)
+        self.phases['right_command'].set_player(right)
 
         for troop in self.battle.left_army.troops:
             self.ready_troops.append(troop)
         for troop in self.battle.right_army.troops:
             self.ready_troops.append(troop)
+
+        self.next_phase('left_command')
 
     def run(self):
         self.phase.run()

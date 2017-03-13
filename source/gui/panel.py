@@ -31,6 +31,10 @@ class Panel(object):
         self.init_element_list()
         return self
 
+    def bind_layout(self, layout):
+        self.set_layout(layout)
+        return self
+
     def __init__(self, (x, y), w, h, layer):
 
         self.coord = Coord(x, y)

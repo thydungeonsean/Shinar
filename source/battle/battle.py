@@ -40,9 +40,9 @@ class Battle(State):
         self.init_state()
 
     def init_state(self):
+        self.switch_screen_layout()
         self.init_battle()
         self.controller.bind_to_state(self)
-        self.switch_screen_layout()
 
     def deinit_state(self):
         self.screen_layout.deinit_state()
@@ -57,9 +57,6 @@ class Battle(State):
         self.screen_layout = ScreenLayoutCollection.BATTLE_LAYOUT
         ScreenLayoutCollection.init_battle_layout()
         self.screen_layout.init_state(self)
-
-    def handle_input(self):
-        self.controller.handle_input()
 
     def set_battle_view(self):
 

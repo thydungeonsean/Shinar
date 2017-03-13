@@ -9,10 +9,10 @@ class Army(Grouping):
 
     troop_types = ('infantry', 'archer', 'chariot')
 
-    def __init__(self, team, color, inf=0, arch=0, char=0):
+    def __init__(self, player, inf=0, arch=0, char=0):
 
-        self.team = team
-        self.color = color
+        self.player = player
+        self.color = self.player.color
         self.side = None
 
         Grouping.__init__(self)
@@ -35,13 +35,13 @@ class Army(Grouping):
     def init_troops(self, inf, arch, char):
 
         for i in range(inf):
-            new = Infantry(self, self.team, self.color)
+            new = Infantry(self, self.player, self.color)
             self.add_troop(new)
         for i in range(arch):
-            new = Archer(self, self.team, self.color)
+            new = Archer(self, self.player, self.color)
             self.add_troop(new)
         for i in range(char):
-            new = Chariot(self, self.team, self.color)
+            new = Chariot(self, self.player, self.color)
             self.add_troop(new)
 
     def add_troop(self, troop):

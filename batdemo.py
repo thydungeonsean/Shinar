@@ -7,6 +7,7 @@ from source.constants import *
 
 import source.battle.battle as battle
 from source.entities.army import Army
+from source.player.player import Player
 
 
 pygame.init()
@@ -14,10 +15,12 @@ os.environ['SDL_VIDEO_CENTERED'] = "TRUE"
 screen = pygame.display.set_mode((SCREENW, SCREENH))
 
 i, a, c = rand_dist()
-red = Army('a', RED, i, a, c)
+red_player = Player('Sean', 'human', RED)
+red = Army(red_player, i, a, c)
 
 i, a, c = rand_dist()
-blue = Army('b', YELLOW, 2, 2, 4)
+player_b = Player('Nebuchadnezzar', 'ai', YELLOW)
+blue = Army(player_b, 2, 2, 4)
 
 b = battle.Battle('s', red, blue)
 

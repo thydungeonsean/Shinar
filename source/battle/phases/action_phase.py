@@ -41,7 +41,7 @@ class ActionPhase(battle_phase.BattlePhase):
             next_phase = 'engagement'
             self.assign_engagement_actions()
         else:
-            next_phase = 'end'
+            next_phase = 'left_command'
         return next_phase
 
     def engage_all(self):

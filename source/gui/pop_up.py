@@ -14,3 +14,10 @@ class PopUp(Element):
 
     def toggle_redraw(self):
         pass
+
+
+class TextBox(PopUp):
+
+    def __init__(self, pos, w, h, text):
+        PopUp.__init__(self, pos, w, h)
+

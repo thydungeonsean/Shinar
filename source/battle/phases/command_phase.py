@@ -34,6 +34,11 @@ class CommandPhase(BattlePhase):
         if self.player.type == 'human':
             screen = self.owner.battle.screen_layout
             screen.open_panel('commands')
+            screen.open_panel('skip_command')
+        elif self.player.type == 'ai':
+            print 'AI running here - command_phase ln 40'
+            # run AI - choose a command, execute command
+            self.end_phase()
 
     def run(self):
         pass

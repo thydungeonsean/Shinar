@@ -52,6 +52,18 @@ def open_chariot_panel(self):
     switch_panel(self, 'chariot_commands')
 
 
+def open_infantry_disp(self):
+    switch_panel(self, 'inf_disp')
+
+
+def open_archer_disp(self):
+    switch_panel(self, 'arch_disp')
+
+
+def open_chariot_disp(self):
+    switch_panel(self, 'char_disp')
+
+
 # main button functions
 def end_command_phase(self):
     command_phase = self.layout.state.scheduler.phase
@@ -67,13 +79,21 @@ def make_pop_up(self):
 
 function_archive = {
     'close_owner': close_owner_panel,
+
     'back_command': open_command_panel,
+    'back_disp': open_disposition_panel,
+
     'open_command': open_command_panel,
     'open_disp': open_disposition_panel,
+    'open_inf_disp': open_infantry_disp,
+    'open_arch_disp': open_archer_disp,
+    'open_char_disp': open_chariot_disp,
     'open_general': open_general_panel,
     'open_infantry': open_infantry_panel,
     'open_archer': open_archer_panel,
     'open_chariot': open_chariot_panel,
+
+    'end_command_phase': end_command_phase,
+
     'make_pop_up': make_pop_up,
-    'end_command_phase': end_command_phase
 }

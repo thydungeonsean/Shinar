@@ -42,12 +42,17 @@ class Element(Panel):
 
 class PersistentPanel(Element):
 
+    @classmethod
+    def wrap_button(cls, button, pos, layer, id_key, **kwargs):
+        w = button.w
+        h = button.h
+        return cls(pos, w, h, layer, id_key, **kwargs)
+
     def __init__(self, pos, w, h, layer, id_key, **kwargs):
         Element.__init__(self, pos, w, h, layer)
         self.id_key = id_key
         self.persistent = True
         self.tag = kwargs.get('tag')
-        print self.tag
 
     def delete(self):
 

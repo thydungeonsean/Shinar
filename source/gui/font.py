@@ -22,13 +22,17 @@ class MenuFont(object):
 
     def draw(self, surface, pos, text, color=BLACK):
 
-        font_image = self.font.render(text, False, color)
-
-        font_image = self.scale_image(font_image)
-        font_rect = font_image.get_rect()
+        font_image, font_rect = self.get_font_image(text, color)
         font_rect.topleft = pos
 
         surface.blit(font_image, font_rect)
+
+    def get_font_image(self, text, color=BLACK):
+
+        font_image = self.font.render(text, False, color)
+        font_image = self.scale_image(font_image)
+        font_rect = font_image.get_rect()
+        return font_image, font_rect
 
     @staticmethod
     def scale_image(image):

@@ -48,18 +48,18 @@ class Engagement(object):
         attack_value = self.get_battle_value(self.attacker)
         defence_value = self.get_battle_value(self.defender)
 
-        attacker_hits = self.attacker.roll_engagement_dice(self.defender, attack_value)
-        defender_hits = self.defender.roll_engagement_dice(self.attacker, defence_value)
+        attacker_hits = self.attacker.stats.roll_engagement_dice(self.defender, attack_value)
+        defender_hits = self.defender.stats.roll_engagement_dice(self.attacker, defence_value)
 
-        self.attacker.apply_hits(self.defender, attacker_hits)
-        self.defender.apply_hits(self.attacker, defender_hits)
+        self.attacker.stats.apply_hits(self.defender, attacker_hits)
+        self.defender.stats.apply_hits(self.attacker, defender_hits)
 
         if defender_hits > attacker_hits:
             wavering = self.attacker
         else:
             wavering = self.defender
 
-        breaks = wavering.morale_check()
+        breaks = wavering.stats.morale_check()
 
         return breaks, wavering
 
@@ -68,4 +68,4 @@ class Engagement(object):
         team = troop.team
         supporters = self.teams[team]
 
-        return troop.cohesion + (len(supporters) * 2)
+        return troop.stats.cohesion + (len(supporters) * 2)

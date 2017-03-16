@@ -149,7 +149,7 @@ class Retreat(Move):
         if 0 > self.actor.coord.x or self.actor.coord.x >= BATTLEGRID_W:  # unit is off map
             self.actor.change_state('rout')
         else:
-            self.actor.decrement_retreat()
+            self.actor.stats.decrement_retreat()
 
 
 class AftermathRetreat(Retreat):

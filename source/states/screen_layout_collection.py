@@ -42,7 +42,6 @@ class ScreenLayoutCollection(object):
             .parent()
         skip_button_panel.attach_element(skip_turn_button)
 
-
         # master command menu
         command_menu = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'commands', 5, 'COMMANDS', backbutton=False,
                                    tag='command').bind_layout(cls.BATTLE_LAYOUT)
@@ -66,10 +65,10 @@ class ScreenLayoutCollection(object):
                                            ).bind_layout(cls.BATTLE_LAYOUT)
 
         archer_disposition = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'arch_disp', 2, 'ARCHER', tag='command'
-                                           ).bind_layout(cls.BATTLE_LAYOUT)
+                                         ).bind_layout(cls.BATTLE_LAYOUT)
 
         chariot_disposition = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'char_disp', 2, 'CHARIOT', tag='command'
-                                           ).bind_layout(cls.BATTLE_LAYOUT)
+                                          ).bind_layout(cls.BATTLE_LAYOUT)
 
         # general
         general_commands_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'general_commands', 3, 'GENERAL',
@@ -96,8 +95,7 @@ class ScreenLayoutCollection(object):
         chariot_command_panel.attach_menu_buttons((MenuButton('RAID'),))
 
         # main menu
-        #main_menu =
-
+        # main_menu =
 
         # tests
 

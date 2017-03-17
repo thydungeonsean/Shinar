@@ -43,3 +43,6 @@ class MenuFont(object):
         new = pygame.transform.scale(image, scale_tuple((w, h)))
 
         return new
+
+    def size(self, text):
+        return scale_tuple(self.font.size(text))

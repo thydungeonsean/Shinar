@@ -1,4 +1,4 @@
-from ..pop_up import PopUp
+from ..pop_up import PopUp, TextPopUp
 
 
 # Function Archive
@@ -73,7 +73,7 @@ def end_command_phase(self):
 # test
 def make_pop_up(self):
 
-    new = PopUp((40, 40), 100, 100)
+    new = TextPopUp((40, 40), 100, 'Hi my name is Sean and I live in poop town this is a test this is only a test.')
     self.layout.add_element(new)
 
 

@@ -120,13 +120,15 @@ class ScreenLayout(object):
         for element in self.element_list:
             click = element.click(point)
             if click != 0:
-                break
+                return 1
+        return 0  # if we return 0 on a click, nothing has been clicked
 
     def right_click(self, point):
         for element in self.element_list:
             click = element.right_click(point)
             if click != 0:
-                break
+                return 1
+        return 0
 
     def motion(self, point):
         for element in self.element_list:

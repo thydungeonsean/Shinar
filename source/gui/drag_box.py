@@ -1,6 +1,8 @@
 from element import Element
-from ..constants import FERTILE_GREEN, scale
+import pygame
+from ..constants import FERTILE_GREEN, scale, BLACK, WHITE
 from font import MenuFont
+from box_border import BoxBorder
 from ..controller.mouse import Mouse
 
 
@@ -44,9 +46,18 @@ class DragBox(Element):
 
 class FPSBox(DragBox):
 
-    def __init__(self, pos, w, h):
-        DragBox.__init__(self, pos, w, h)
+    def __init__(self, pos):
+
+        DragBox.__init__(self, pos, scale(30), scale(30))
+        self.border = BoxBorder(self.w, self.h)
+        self.border.draw(self.image)
         self.fps = 0
+        f = scale(3)
+        self.fill_rect = pygame.Rect((f, f), (self.border.w - f*2, self.border.w - f*2))
+        self.image.set_alpha(200)
+
+    def set_color(self):
+        return BLACK
 
     def draw(self, surface):
         if self.needs_redraw:
@@ -64,10 +75,10 @@ class FPSBox(DragBox):
         return True
 
     def draw_fps(self):
-        self.image.fill(self.color)
+        self.border.draw(self.image)
         self.draw_text(str(self.fps))
 
     def draw_text(self, text):
         f = MenuFont.get_instance()
-        f.draw(self.image, (scale(2), scale(-4)), text)
+        f.draw(self.image, (scale(5), scale(0)), text, color=WHITE)
 

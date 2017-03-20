@@ -1,6 +1,7 @@
 import engagement_manager as em
 
 
+# TODO - find fatal error with removing troops from engagements - rare
 class Engagement(object):
 
     def __init__(self, attacker, defender):

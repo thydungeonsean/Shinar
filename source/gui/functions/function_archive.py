@@ -73,7 +73,11 @@ def end_command_phase(self):
 # test
 def make_pop_up(self):
 
-    new = TextPopUp((40, 40), 100, 'Hi my name is Sean and I live in poop town this is a test this is only a test.')
+    new = TextPopUp((40, 40), 200, 'Hi my name is Sean and I live in poop town this is a test this is only a test. '
+                                   'Don\'t even trip about your pants dawg.')
+                                   #'\nHi my name is Sean and I live in poop town. \nThis is a test this is only a test. '
+                                   #'Don\'t even trip about your pants dawg. \n')
+                                   # '\n1234\n5678\n')
     self.layout.add_element(new)
 
 

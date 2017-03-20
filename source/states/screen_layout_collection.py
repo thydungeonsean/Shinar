@@ -100,7 +100,7 @@ class ScreenLayoutCollection(object):
         # tests
 
         drag = DragBox((650, 20), 100, 100)
-        fps = FPSBox((750, 550), 50, 50)
+        fps = FPSBox((750, 550))
         # test2 = Button(cls.BATTLE_LAYOUT, (2, 2), 10, 10, function=make_pop_up)
         # test2 = Button.close_function(Button.from_image('close', cls.BATTLE_LAYOUT, (2, 2), func=make_pop_up), drag)
         button2 = MenuButton('Button', function='make_pop_up')

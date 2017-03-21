@@ -3,7 +3,8 @@ from ..images.troop_image import TroopImage
 from coord import Coord
 from battle_stats import BattleStats
 from unit_state_archive import UnitStateArchive
-from random import shuffle, randint
+from ..gui.troop_handle import TroopHandle
+from random import shuffle
 
 
 class Troop(object):
@@ -29,24 +30,14 @@ class Troop(object):
         self.type = type
 
         self.stats = BattleStats(self, self.type)
-        #
-        # self.cohesion = cohesion
-        # self.max_cohesion = cohesion
-        # self.morale = morale
-        # self.max_morale = morale
-        # self.speed = speed
-        # self.strength = strength
-        # self.weakness = weakness
-        # self.break_points = 0
-        # self.retreat_count = 0
-
-        #self.needs_check = False
 
         self.state = UnitStateArchive.get_state('advance')
         
         self.x_offset, self.y_offset = self.set_image_offsets()
         self.image = self.set_image()
         self.coord.bind(self.image.coord)
+
+        self.ui_handle = TroopHandle(self)
 
     def init_location(self, location):
         self.set_location(location)

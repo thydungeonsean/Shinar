@@ -75,4 +75,3 @@ class Controller(object):
     def end_program(self):
         pygame.quit()
         sys.exit()
-        quit()

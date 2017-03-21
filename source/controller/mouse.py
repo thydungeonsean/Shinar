@@ -8,7 +8,7 @@ class Mouse(object):
 
     instance = None
 
-    HOVERDELAY = 20
+    HOVERDELAY = 40
 
     @classmethod
     def get_instance(cls):
@@ -33,13 +33,15 @@ class Mouse(object):
 
     def click(self):
         click = self.state.screen_layout.click(self.position)
-        if click == 0:
-            self.click_observer.left_click()
+        #if click == 0:
+        self.click_observer.left_click()  # TODO - maybe click always registered
+        self.reset_hover()
         
     def right_click(self):
-        click = self.state.screen_layout.click(self.position)
-        if click == 0:
-            self.click_observer.right_click()
+        click = self.state.screen_layout.right_click(self.position)
+        #if click == 0:
+        self.click_observer.right_click()
+        self.reset_hover()
 
     def motion(self):
         self.state.screen_layout.motion(self.position)
@@ -53,5 +55,8 @@ class Mouse(object):
             self.state.screen_layout.hover(self.position)
 
     def reset_hover(self):
+        if self.hover_count > 0:
+            self.state.screen_layout.end_hover()
         self.hover_count = 0
+
 

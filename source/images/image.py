@@ -1,7 +1,6 @@
 import pygame
 from ..constants import *
 import os
-from ..map.battle_grid import BattleGrid
 
 
 REL = '\\..'

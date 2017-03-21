@@ -1,10 +1,7 @@
-from element import PersistentPanel
+from persistent_panel import PersistentPanel
 from button import CloseButton, MenuButton
 from menu_grid import MenuGrid
 from ..constants import COMMAND_PANEL_W, scale
-
-
-#class MainCommandMenu()
 
 
 class CommandMenu(PersistentPanel):

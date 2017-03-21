@@ -16,7 +16,6 @@ class ClickObserver(object):
     def left_click(self):
         for member in self.members[:]:
             member().on_left_click(member())
-        print self.members
 
     def right_click(self):
         for member in self.members[:]:
@@ -28,7 +27,6 @@ class ClickSubscriber(object):
     @staticmethod
     def close_owner(self):
         self.owner.delete()
-        self.observer.remove_member(self.ref)
 
     @classmethod
     def close_element_sub(cls, owner, observer):
@@ -42,6 +40,9 @@ class ClickSubscriber(object):
         self.observer = observer
         self.ref = weakref.ref(self)
         self.observer.add_member(self.ref)
+
+    def unsubscribe(self):
+        self.observer.remove_member(self.ref)
 
     def on_left_click(self):
         pass

@@ -40,7 +40,8 @@ class ScreenLayout(object):
 
     # membership methods
     def add_element(self, element, set_list=True):
-        self.add_to_draw_list(element)
+        if element.visible:
+            self.add_to_draw_list(element)
         self.add_to_layers(element)
         element.set_layout(self)
         if element.persistent:
@@ -111,7 +112,6 @@ class ScreenLayout(object):
         l = element.layer
         self.element_layers[l].remove(element)
         self.element_list.remove(element)
-        self.element_list = self.set_element_list()
 
     # input handling
     def click(self, point):
@@ -141,6 +141,10 @@ class ScreenLayout(object):
     def hover(self, point):
         for element in self.element_list:
             element.hover(point)
+
+    def end_hover(self):
+        for element in self.element_list:
+            element.end_hover()
 
     # other
     def refresh(self):

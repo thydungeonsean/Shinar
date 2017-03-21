@@ -5,7 +5,7 @@ from ..constants import *
 
 class TextBox(object):
 
-    MIN_H = scale(50)
+    MIN_H = scale(30)
 
     def __init__(self, w, text):
 

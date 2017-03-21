@@ -54,11 +54,11 @@ class Button(Element):
     #     self.owner.delete()
     #     self.layout.refresh()
         
-    def __init__(self, pos, w, h, function=None):
+    def __init__(self, pos, w, h, function=None, **kwargs):
 
         self.owner = None
         self.perform_function = self.set_function(function)
-        Element.__init__(self, pos, w, h, 1)
+        Element.__init__(self, pos, w, h, 1, **kwargs)
 
     def set_color(self):
         return RED
@@ -70,10 +70,6 @@ class Button(Element):
 
     def perform_function(self):
         pass
-
-    def hover(self, point):
-        if self.point_is_over(point):
-            pass
 
     def draw_text(self, text):
         f = MenuFont.get_instance()
@@ -91,15 +87,15 @@ class CloseButton(Button):
     CLOSE_BUTTON_W = scale(25)
     CLOSE_BUTTON_H = scale(25)
 
-    def __init__(self, owner, pos, w, h):
-        Button.__init__(self, pos, w, h)
+    def __init__(self, owner, pos, w, h, **kwargs):
+        Button.__init__(self, pos, w, h, **kwargs)
         self.owner = owner
         self.perform_function = self.get_archived_function('back_command')
 
 
 class MenuButton(Button):
 
-    def __init__(self, text, function=None):
+    def __init__(self, text, function=None, **kwargs):
 
-        Button.__init__(self, (0, 0), Button.COMMAND_W, Button.COMMAND_H, function=function)
+        Button.__init__(self, (0, 0), Button.COMMAND_W, Button.COMMAND_H, function=function, **kwargs)
         self.draw_text(text)

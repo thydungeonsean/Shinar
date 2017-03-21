@@ -1,6 +1,4 @@
 from panel import Panel
-import pygame
-from ..constants import LT_GREY
 
 
 class Element(Panel):
@@ -9,14 +7,18 @@ class Element(Panel):
     Element is visible to controller and can be interacted with
     """
 
-    def __init__(self, pos, w, h, layer):
-        Panel.__init__(self, pos, w, h, layer)
+    def __init__(self, pos, w, h, layer, **kwargs):
+        Panel.__init__(self, pos, w, h, layer, **kwargs)
         self.interactive = True
+        self.hover_component = None
 
     def point_is_over(self, (px, py)):
         if self.x <= px <= self.x + self.w and self.y <= py <= self.y + self.h:
             return True
         return False
+
+    def set_hover_component(self, hover):
+        self.hover_component = hover
 
     def click(self, point):
         if self.point_is_over(point):
@@ -34,37 +36,12 @@ class Element(Panel):
         pass
 
     def hover(self, point):
-        pass
+        if self.hover_component is not None and self.point_is_over(point):
+                self.hover_component.hovering()
+
+    def end_hover(self):
+        if self.hover_component is not None:
+            self.hover_component.end_hover()
 
     def perform_function(self, dummy):
         raise NotImplementedError
-
-
-class PersistentPanel(Element):
-
-    @classmethod
-    def wrap_button(cls, button, pos, layer, id_key, **kwargs):
-        w = button.w
-        h = button.h
-        return cls(pos, w, h, layer, id_key, **kwargs)
-
-    def __init__(self, pos, w, h, layer, id_key, **kwargs):
-        Element.__init__(self, pos, w, h, layer)
-        self.id_key = id_key
-        self.persistent = True
-        self.tag = kwargs.get('tag')
-
-    def delete(self):
-
-        self.layout.remove_element(self)
-        if self.element_list is not None:
-            for element in self.element_list:
-                self.layout.remove_element(element)
-
-        self.layout.archive_element(self)
-
-    def set_color(self):
-        return LT_GREY
-
-    def perform_function(self, dummy):
-        pass

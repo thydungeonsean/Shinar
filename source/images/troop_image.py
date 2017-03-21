@@ -1,5 +1,5 @@
 from image import Image
-from ..entities.coord import Coord
+from ..entities.coord import Coord, TroopImageCoord
 import pygame
 from ..constants import *
 
@@ -18,16 +18,14 @@ class TroopImage(Image):
         self.y_ani_mod = 0
 
         self.coord = Coord()
+        self.image_coord = TroopImageCoord(self.coord, self)
 
     def set_asset_path(self):
 
         return SPRITEPATH
 
     def get_pixel_coords(self):
-        x, y = self.coord.get
-        return (x * BATTLEGRID_SQUARE_W + self.x_offset + BATTLEFIELD_X_MARGIN + self.x_ani_mod,
-         y * BATTLEGRID_SQUARE_H + self.y_offset + BATTLEFIELD_Y_MARGIN + self.y_ani_mod
-         + (BATTLEGRID_SQUARE_H * .95))
+        return self.image_coord.get
 
     def position(self):
 
@@ -47,3 +45,4 @@ class TroopImage(Image):
 
         self.x_ani_mod = x
         self.y_ani_mod = y
+        self.image_coord.update(self.coord.get)

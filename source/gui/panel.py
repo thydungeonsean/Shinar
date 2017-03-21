@@ -35,7 +35,7 @@ class Panel(object):
         self.set_layout(layout)
         return self
 
-    def __init__(self, (x, y), w, h, layer):
+    def __init__(self, (x, y), w, h, layer, **kwargs):
 
         self.coord = Coord(x, y)
         self.w = w
@@ -50,9 +50,16 @@ class Panel(object):
         self.interactive = False
         self.persistent = False
 
-        self.needs_redraw = True
-        self.color = self.set_color()
-        self.image, self.rect = self.set_basic_image()
+        self.visible = kwargs.get('visible', True)
+        if self.visible:
+            self.needs_redraw = True
+            self.color = self.set_color()
+            self.image, self.rect = self.set_basic_image()
+        else:
+            self.needs_redraw = False
+            self.color = None
+            self.image = None
+            self.rect = None
 
     # setters
     def set_layout(self, layout):

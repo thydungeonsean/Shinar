@@ -1,0 +1,22 @@
+# Battle Layout buttons
+
+[: ]
+
+[disp : Disposition - change the standard behaviour of your troops.]
+[general : General Commands - affect any or all of your troops.]
+[infantry : Infantry Commands - order your infantry.]
+[archer : Archer Commands - order your archers.]
+[chariot : Chariot Commands - order your chariots.]
+
+[maneuver : Reposition your troops.]
+[rally : Turn the tide of battle!]
+[regroup : Reorganize a troop - restore cohesion]
+
+[charge : Gain speed for a turn at the cost of cohesion.]
+[reform : Hold the formation.]
+[resurge : Resilient infantry push back!]
+
+[focus : Concentrate arrows on the enemy.]
+[barrage : Archers stand fast and fire quickly.]
+
+[raid : Chariots punch through to the enemy's camp!]

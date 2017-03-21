@@ -1,10 +1,10 @@
 from ..gui.screen_layout import ScreenLayout
 from ..gui.panel import Panel
 from ..gui.command_menu import CommandMenu
-from ..gui.button import Button, CloseButton, MenuButton
+from ..gui.button import MenuButton
 from ..gui.drag_box import DragBox, FPSBox
-from ..gui.element import PersistentPanel
-from ..gui.pop_up import PopUp
+from ..gui.persistent_panel import PersistentPanel
+from ..gui.hover_component import *
 
 from ..constants import *
 
@@ -45,20 +45,22 @@ class ScreenLayoutCollection(object):
         # master command menu
         command_menu = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'commands', 5, 'COMMANDS', backbutton=False,
                                    tag='command').bind_layout(cls.BATTLE_LAYOUT)
-        command_menu.attach_menu_buttons((MenuButton('DISPOSITION', function='open_disp'),
-                                          MenuButton('GENERAL', function='open_general'),
-                                          MenuButton('INFANTRY', function='open_infantry'),
-                                          MenuButton('ARCHER', function='open_archer'),
-                                          MenuButton('CHARIOT', function='open_chariot')))
+
+        command_menu.attach_menu_buttons((add_text_pop_up(MenuButton('DISPOSITION', function='open_disp'), 'disp'),
+                                          add_text_pop_up(MenuButton('GENERAL', function='open_general'), 'general'),
+                                          add_text_pop_up(MenuButton('INFANTRY', function='open_infantry'), 'infantry'),
+                                          add_text_pop_up(MenuButton('ARCHER', function='open_archer'), 'archer'),
+                                          add_text_pop_up(MenuButton('CHARIOT', function='open_chariot'), 'chariot')))
 
         # command menus
         # disposition
         disposition_commands_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'disposition_commands', 3,
                                                  'DISPOSITION', tag='command').bind_layout(cls.BATTLE_LAYOUT)
 
-        disposition_commands_panel.attach_menu_buttons((MenuButton('INFANTRY', function='open_inf_disp'),
-                                                        MenuButton('ARCHER', function='open_arch_disp'),
-                                                        MenuButton('CHARIOT', function='open_char_disp')))
+        disposition_commands_panel.attach_menu_buttons((
+                                add_text_pop_up(MenuButton('INFANTRY', function='open_inf_disp'), ''),
+                                add_text_pop_up(MenuButton('ARCHER', function='open_arch_disp'), ''),
+                                add_text_pop_up(MenuButton('CHARIOT', function='open_char_disp'), '')))
 
         # disposition sub menus
         infantry_disposition = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'inf_disp', 2, 'INFANTRY', tag='command'
@@ -73,26 +75,26 @@ class ScreenLayoutCollection(object):
         # general
         general_commands_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'general_commands', 3, 'GENERAL',
                                              tag='command').bind_layout(cls.BATTLE_LAYOUT)
-        general_commands_panel.attach_menu_buttons((MenuButton('MANEUVER'),
-                                                    MenuButton('RALLY'),
-                                                    MenuButton('REGROUP')))
+        general_commands_panel.attach_menu_buttons((add_text_pop_up(MenuButton('MANEUVER'), 'maneuver'),
+                                                    add_text_pop_up(MenuButton('RALLY'), 'rally'),
+                                                    add_text_pop_up(MenuButton('REGROUP'), 'regroup')))
         # infantry
         infantry_command_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'infantry_commands', 3, 'INFANTRY',
                                              tag='command').bind_layout(cls.BATTLE_LAYOUT)
-        infantry_command_panel.attach_menu_buttons((MenuButton('CHARGE'),
-                                                    MenuButton('REFORM'),
-                                                    MenuButton('RESURGE')))
+        infantry_command_panel.attach_menu_buttons((add_text_pop_up(MenuButton('CHARGE'), 'charge'),
+                                                    add_text_pop_up(MenuButton('REFORM'), 'reform'),
+                                                    add_text_pop_up(MenuButton('RESURGE'), 'resurge')))
 
         # archer
         archer_command_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'archer_commands', 2, 'ARCHER',
                                            tag='command').bind_layout(cls.BATTLE_LAYOUT)
-        archer_command_panel.attach_menu_buttons((MenuButton('FOCUS'),
-                                                  MenuButton('BARRAGE')))
+        archer_command_panel.attach_menu_buttons((add_text_pop_up(MenuButton('FOCUS'), 'focus'),
+                                                  add_text_pop_up(MenuButton('BARRAGE'), 'barrage')))
 
         # chariot
         chariot_command_panel = CommandMenu((right_panel.x, COMMAND_PANEL_Y), 2, 'chariot_commands', 1, 'CHARIOT',
                                             tag='command').bind_layout(cls.BATTLE_LAYOUT)
-        chariot_command_panel.attach_menu_buttons((MenuButton('RAID'),))
+        chariot_command_panel.attach_menu_buttons((add_text_pop_up(MenuButton('RAID'), 'raid'),))
 
         # main menu
         # main_menu =

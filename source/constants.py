@@ -19,6 +19,7 @@ TILEPATH = '\\..\\assets\\tiles\\'
 SPRITEPATH = '\\..\\assets\\sprites\\'
 GUIPATH = '\\..\\assets\\gui\\'
 FONTPATH = '\\..\\assets\\font\\'
+TEXTPATH = '\\..\\assets\\data\\text\\'
 
 
 SCREENW = scale(400)

@@ -10,6 +10,7 @@ from engagement_manager import EngagementManager
 from battle_scale import BattleScale
 from ..constants import BATTLEFIELD_COORD
 from ..states.screen_layout_collection import ScreenLayoutCollection
+from ..gui.troop_handle import TroopHandle
 
 
 class Battle(State):
@@ -52,6 +53,9 @@ class Battle(State):
         self.scheduler.init_battle(self)
         self.battle_scale.init_battle(self)
 
+        # temporary - will be triggered by end of deployment phase
+        self.add_troop_handles()
+
     def switch_screen_layout(self):
 
         self.screen_layout = ScreenLayoutCollection.BATTLE_LAYOUT
@@ -76,6 +80,12 @@ class Battle(State):
         self.battle_view.draw(screen)
 
         self.screen_layout.draw(screen)
+
+    def add_troop_handles(self):
+
+        for troop in self.active_troops:
+            troop_handle = TroopHandle(troop)
+            self.screen_layout.add_element(troop_handle)
 
     def get_opposing_army(self, troop):
         if troop.side == 'left':
@@ -109,7 +119,7 @@ class Battle(State):
         troop.activate()
 
     @property
-    def active_left_troops(self):
+    def active_left_troops_count(self):
         count = 0
         for troop in self.left_army.troops:
             if troop.active:
@@ -117,12 +127,23 @@ class Battle(State):
         return count
 
     @property
-    def active_right_troops(self):
+    def active_right_troops_count(self):
         count = 0
         for troop in self.right_army.troops:
             if troop.active:
                 count += 1
         return count
+
+    @property
+    def active_troops(self):
+        active = []
+        for troop in self.left_army.troops:
+            if troop.active:
+                active.append(troop)
+        for troop in self.right_army.troops:
+            if troop.active:
+                active.append(troop)
+        return active
 
     def run(self):
         self.scheduler.run()

@@ -45,8 +45,8 @@ class BattleScale(object):
         self.scale_needs_update = False
 
     def set_initial_points(self):
-        self.points['left'] = self.battle.active_left_troops * 10
-        self.points['right'] = self.battle.active_right_troops * 10
+        self.points['left'] = self.battle.active_left_troops_count * 10
+        self.points['right'] = self.battle.active_right_troops_count * 10
 
     def subscribe_to_observer(self):
         observer = Observer.get_instance()

@@ -9,6 +9,9 @@ from ..gui.hover_component import *
 from ..constants import *
 
 
+def dummy():
+    pass
+
 class ScreenLayoutCollection(object):
 
     BATTLE_LAYOUT = ScreenLayout()
@@ -100,16 +103,12 @@ class ScreenLayoutCollection(object):
         # main_menu =
 
         # tests
-
-        drag = DragBox((650, 20), 100, 100)
         fps = FPSBox((750, 550))
-        # test2 = Button(cls.BATTLE_LAYOUT, (2, 2), 10, 10, function=make_pop_up)
-        # test2 = Button.close_function(Button.from_image('close', cls.BATTLE_LAYOUT, (2, 2), func=make_pop_up), drag)
-        button2 = MenuButton('Button', function='make_pop_up')
-        drag.attach_element(button2)
 
-        cls.BATTLE_LAYOUT.add_elements((top_frame, left_frame, bot_frame, right_frame, right_panel, fps))
+        cls.BATTLE_LAYOUT.add_elements((top_frame, left_frame, bot_frame, right_frame, right_panel,
+                                        fps))
         cls.BATTLE_LAYOUT.archive_elements((skip_button_panel, command_menu, disposition_commands_panel,
                                             general_commands_panel, infantry_command_panel, archer_command_panel,
                                             chariot_command_panel, infantry_disposition, archer_disposition,
                                             chariot_disposition))
+

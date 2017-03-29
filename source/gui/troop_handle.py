@@ -13,6 +13,7 @@ class TroopHandle(Element):
         troop.image.image_coord.bind(self.coord)
         print self.coord.get
         self.troop = troop
+        self.image.set_alpha(200)
 
     def perform_function(self, dummy):
         print 'clicked ' + self.troop.tag
@@ -21,4 +22,4 @@ class TroopHandle(Element):
         pass
 
     def set_color(self):
-        return (255, 0 , 0)
+        return 255, 0, 0

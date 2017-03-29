@@ -8,9 +8,10 @@ from battle_scheduler import BattleScheduler
 from ..entities.effect import EffectManager
 from engagement_manager import EngagementManager
 from battle_scale import BattleScale
-from ..constants import BATTLEFIELD_COORD
+from ..constants import BATTLEFIELD_COORD, BATTLEFIELD_W, BATTLEFIELD_H
 from ..states.screen_layout_collection import ScreenLayoutCollection
 from ..gui.troop_handle import TroopHandle
+from ..gui.panel import Panel
 
 
 class Battle(State):
@@ -21,6 +22,7 @@ class Battle(State):
 
         self.battlefield = BattleField()
         self.battle_view = self.set_battle_view()
+        self.battlefield_ui_panel = self.set_ui_panel()
 
         self.left_army = left_army
         self.left_army.set_side('left')
@@ -70,6 +72,9 @@ class Battle(State):
         view.position(BATTLEFIELD_COORD)
         return view
 
+    def set_ui_panel(self):
+        return Panel(BATTLEFIELD_COORD, BATTLEFIELD_W, BATTLEFIELD_H, 0, visible=False).parent()
+
     def render(self):
 
         screen = pygame.display.get_surface()
@@ -85,6 +90,7 @@ class Battle(State):
 
         for troop in self.active_troops:
             troop_handle = TroopHandle(troop)
+            self.battlefield_ui_panel.attach_element(troop_handle)
             self.screen_layout.add_element(troop_handle)
 
     def get_opposing_army(self, troop):

@@ -29,7 +29,7 @@ class TroopImage(Image):
 
     def position(self):
 
-        self.rect.bottomleft = self.get_pixel_coords()
+        self.rect.topleft = self.get_pixel_coords()
 
     def change_facing(self, new_facing):
 

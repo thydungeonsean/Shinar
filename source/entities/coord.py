@@ -51,8 +51,8 @@ class TroopImageCoord(Coord):
 
     def set(self, (x, y)):
         self.x = int(x * BATTLEGRID_SQUARE_W + self.image.x_offset + BATTLEFIELD_X_MARGIN + self.image.x_ani_mod)
-        self.y = int(y * BATTLEGRID_SQUARE_H + self.image.y_offset + BATTLEFIELD_Y_MARGIN + self.image.y_ani_mod +
-                     (BATTLEGRID_SQUARE_H * .95))
+        self.y = int(y * BATTLEGRID_SQUARE_H + self.image.y_offset + BATTLEFIELD_Y_MARGIN + self.image.y_ani_mod) # +
+                     #(BATTLEGRID_SQUARE_H * .95))
         if self.bound is not None:
             self.bound.set((self.x, self.y))
 

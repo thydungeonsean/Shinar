@@ -51,15 +51,15 @@ class Panel(object):
         self.persistent = False
 
         self.visible = kwargs.get('visible', True)
+        self.rect = self.set_rect()
         if self.visible:
             self.needs_redraw = True
             self.color = self.set_color()
-            self.image, self.rect = self.set_basic_image()
+            self.image = self.set_basic_image()
         else:
             self.needs_redraw = False
             self.color = None
             self.image = None
-            self.rect = None
 
     # setters
     def set_layout(self, layout):
@@ -83,9 +83,13 @@ class Panel(object):
         image = pygame.Surface((self.w, self.h))
         image.fill(self.color)
         image = image.convert()
-        rect = image.get_rect()
-        rect.topleft = self.x, self.y
-        return image, rect
+        return image
+
+    def set_rect(self):
+
+        rect = pygame.Rect((self.x, self.y), (self.w, self.h))
+        #rect.topleft = self.x, self.y
+        return rect
 
     # positional methods and properties
     @property

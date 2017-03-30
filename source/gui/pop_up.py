@@ -22,8 +22,8 @@ class PopUp(element.Element):
     def delete(self):
         self.layout.remove_element(self)
         if self.element_list is not None:
-            for element in self.element_list:
-                self.layout.remove_element(element)
+            for e in self.element_list:
+                self.layout.remove_element(e)
         self.layout.refresh()
         self.mouse_sub.unsubscribe()
 
@@ -32,6 +32,29 @@ class PopUp(element.Element):
 
     def toggle_redraw(self):
         pass
+
+    def perform_function(self, dummy):
+        pass
+
+    def get_mouse_pos(self):
+        mx, my = Mouse.get_instance().position
+
+        if mx + self.w > SCREENW:
+            x = mx - self.w - scale(1)
+        else:
+            x = mx + scale(1)
+
+        if my + self.h > SCREENH:
+            y = my - self.h
+        else:
+            y = my
+
+        return x, y
+
+    def set_mouse_pos(self):
+        pos = self.get_mouse_pos()
+        self.coord.set(pos)
+        self.reset_pos()
 
 
 class TextPopUp(PopUp):
@@ -46,28 +69,9 @@ class TextPopUp(PopUp):
         w = self.border.w
         h = self.border.h
 
-        pos = self.get_mouse_pos()
-
-        PopUp.__init__(self, pos, w, h)
+        PopUp.__init__(self, (0, 0), w, h)
         self.border.draw(self.image)
         self.text_box.draw(self.image)
+        self.set_mouse_pos()
 
         # self.image.set_alpha(200)
-
-    def perform_function(self, dummy):
-        pass
-
-    def get_mouse_pos(self):
-        mx, my = Mouse.get_instance().position
-
-        if mx + self.border.w > SCREENW:
-            x = mx - self.border.w - scale(1)
-        else:
-            x = mx + scale(1)
-
-        if my + self.border.h > SCREENH:
-            y = my - self.border.h
-        else:
-            y = my
-
-        return x, y

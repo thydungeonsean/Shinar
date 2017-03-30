@@ -56,5 +56,3 @@ def add_text_pop_up(element, text_key, width='default'):
     element.set_hover_component(h)
 
     return element
-
-

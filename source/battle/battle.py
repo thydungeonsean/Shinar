@@ -12,6 +12,7 @@ from ..constants import BATTLEFIELD_COORD, BATTLEFIELD_W, BATTLEFIELD_H
 from ..states.screen_layout_collection import ScreenLayoutCollection
 from ..gui.troop_handle import TroopHandle
 from ..gui.panel import Panel
+from ..gui.hover_component import add_text_pop_up
 
 
 class Battle(State):
@@ -73,7 +74,9 @@ class Battle(State):
         return view
 
     def set_ui_panel(self):
-        return Panel(BATTLEFIELD_COORD, BATTLEFIELD_W, BATTLEFIELD_H, 0, visible=False).parent()
+        ui_panel = Panel(BATTLEFIELD_COORD, BATTLEFIELD_W, BATTLEFIELD_H, 0, visible=False).parent()
+        ui_panel.set_layout(self.screen_layout)
+        return ui_panel
 
     def render(self):
 
@@ -89,9 +92,11 @@ class Battle(State):
     def add_troop_handles(self):
 
         for troop in self.active_troops:
-            troop_handle = TroopHandle(troop)
+            troop_handle = add_text_pop_up(TroopHandle(troop), 'disp')
             self.battlefield_ui_panel.attach_element(troop_handle)
             self.screen_layout.add_element(troop_handle)
+
+        self.screen_layout.add_element(self.battlefield_ui_panel)
 
     def get_opposing_army(self, troop):
         if troop.side == 'left':

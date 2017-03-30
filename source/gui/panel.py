@@ -88,7 +88,6 @@ class Panel(object):
     def set_rect(self):
 
         rect = pygame.Rect((self.x, self.y), (self.w, self.h))
-        #rect.topleft = self.x, self.y
         return rect
 
     # positional methods and properties
@@ -111,6 +110,11 @@ class Panel(object):
         if self.owner is None:
             return 0
         return self.owner.y
+
+    def point_is_over(self, (px, py)):
+        if self.x <= px <= self.x + self.w and self.y <= py <= self.y + self.h:
+            return True
+        return False
 
     def move(self, (x, y)):
         self.coord.set((x, y))

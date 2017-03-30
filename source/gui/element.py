@@ -12,17 +12,17 @@ class Element(Panel):
         self.interactive = True
         self.hover_component = None
 
-    def point_is_over(self, (px, py)):
-        if self.x <= px <= self.x + self.w and self.y <= py <= self.y + self.h:
-            return True
-        return False
-
     def set_hover_component(self, hover):
         self.hover_component = hover
 
     def click(self, point):
         if self.point_is_over(point):
-            self.perform_function(self)
+            if self.owner is None:
+                self.perform_function(self)
+            elif self.owner.point_is_over(point):
+                self.perform_function(self)
+            else:
+                return 0
         else:
             return 0
 

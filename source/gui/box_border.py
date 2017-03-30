@@ -15,6 +15,13 @@ class BoxBorder(object):
         border = cls(w, h)
         return border
 
+    @classmethod
+    def frame_dimensions(cls, w, h):
+        bw = w + BoxBorder.THIN_W * 2
+        bh = h + BoxBorder.THIN_W * 2
+        border = cls(w, h)
+        return border
+
     def __init__(self, w, h):
 
         self.w = w

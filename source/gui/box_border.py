@@ -19,7 +19,7 @@ class BoxBorder(object):
     def frame_dimensions(cls, w, h):
         bw = w + BoxBorder.THIN_W * 2
         bh = h + BoxBorder.THIN_W * 2
-        border = cls(w, h)
+        border = cls(bw, bh)
         return border
 
     def __init__(self, w, h):

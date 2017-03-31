@@ -12,7 +12,7 @@ from ..constants import BATTLEFIELD_COORD, BATTLEFIELD_W, BATTLEFIELD_H
 from ..states.screen_layout_collection import ScreenLayoutCollection
 from ..gui.troop_handle import TroopHandle
 from ..gui.panel import Panel
-from ..gui.hover_component import add_text_pop_up
+from ..gui.hover_component import add_troop_display
 
 
 class Battle(State):
@@ -92,9 +92,9 @@ class Battle(State):
     def add_troop_handles(self):
 
         for troop in self.active_troops:
-            troop_handle = add_text_pop_up(TroopHandle(troop), 'disp')
+            troop_handle = add_troop_display(TroopHandle(troop), troop)
             self.battlefield_ui_panel.attach_element(troop_handle)
-            self.screen_layout.add_element(troop_handle)
+            #self.screen_layout.add_element(troop_handle)
 
         self.screen_layout.add_element(self.battlefield_ui_panel)
 

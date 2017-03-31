@@ -1,4 +1,5 @@
 from pop_up import TextPopUp
+from troop_display import TroopDisplay
 from ..constants import *
 from ..states.data_parser import *
 
@@ -14,6 +15,12 @@ class HoverComponent(object):
         self.owner.layout.add_element(new)
         self.element = new
 
+    def new_troop_display(self, *args):
+        troop = args[0]
+        new = TroopDisplay(troop)
+        self.owner.layout.add_element(new)
+        self.element = new
+
     @classmethod
     def text_box(cls, owner, text, text_w='default'):
         instance = cls(owner)
@@ -21,6 +28,13 @@ class HoverComponent(object):
             text_w = cls.STND_W
         instance.hover_effect = cls.new_text_pop_up
         instance.args = (text_w, text)
+        return instance
+
+    @classmethod
+    def troop_display(cls, owner, troop):
+        instance = cls(owner)
+        instance.hover_effect = cls.new_troop_display
+        instance.args = (troop,)
         return instance
 
     def __init__(self, owner):
@@ -33,7 +47,7 @@ class HoverComponent(object):
         if self.state == 1:
             pass
         elif self.state == 0:
-            self.start_hover()
+            self.start_hover()  # TODO don't allow hover if element is not on it's owner panel
             self.state = 1
 
     def end_hover(self):
@@ -50,9 +64,18 @@ class HoverComponent(object):
 
 
 def add_text_pop_up(element, text_key, width='default'):
+
     text = get_ui_text(text_key)
     h = HoverComponent.text_box(element, text, text_w=width)
 
+    element.set_hover_component(h)
+
+    return element
+
+
+def add_troop_display(element, troop):
+
+    h = HoverComponent.troop_display(element, troop)
     element.set_hover_component(h)
 
     return element

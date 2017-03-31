@@ -75,6 +75,13 @@ class BattleStats(object):
     def speed(self):
         return self.base_speed + self.bonus_speed
 
+    @property
+    def morale_per(self):
+        if self.morale <= 0:
+            return .1
+        per = self.morale / float(self.max_morale)
+        return per
+
     def damage_cohesion(self):
         self.base_cohesion -= 1
         if self.base_cohesion <= 1:

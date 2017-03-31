@@ -1,6 +1,6 @@
 from persistent_panel import PersistentPanel
 from button import CloseButton, MenuButton
-from menu_grid import MenuGrid
+from position_grid import PositionGrid
 from ..constants import COMMAND_PANEL_W, scale
 
 
@@ -15,7 +15,7 @@ class CommandMenu(PersistentPanel):
         w, h = self.set_dimensions(backbutton)
 
         PersistentPanel.__init__(self, pos, w, h, layer, id_key, **kwargs)
-        self.menu_grid = MenuGrid(self, MenuButton.COMMAND_W, MenuButton.COMMAND_H)
+        self.menu_grid = PositionGrid(MenuButton.COMMAND_W, MenuButton.COMMAND_H, rows=num_buttons)
 
         self.parent()
         if backbutton:

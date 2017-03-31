@@ -1,15 +1,14 @@
 from ..constants import scale
 
 
-class MenuGrid(object):
+class PositionGrid(object):
 
-    def __init__(self, owner, col_w, row_h, columns=1, gap=scale(5), x=scale(5), y=scale(5)):
+    def __init__(self, col_w, row_h, rows=1, columns=1, gap=scale(5), x=scale(5), y=scale(5)):
 
-        self.owner = owner
         self.x = x
         self.y = y
         self.columns = columns
-        self.rows = self.owner.num_buttons
+        self.rows = rows
 
         self.col_w = col_w
         self.row_h = row_h

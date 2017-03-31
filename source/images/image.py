@@ -12,7 +12,7 @@ class Image(object):
     def get_sized_image(cls, w, h):
         instance = cls()
         instance.image = pygame.Surface((w, h))
-        instance.rect = instance.set_dims()
+        instance.rect = instance.image.get_rect()
         return instance
 
     def __init__(self, imagename=None, colorkey=None):
@@ -24,7 +24,7 @@ class Image(object):
         self.image = self.init_image(imagename)
         if colorkey is not None:
             self.set_colorkey(colorkey)
-        self.rect = self.set_dims()
+        self.rect = self.image.get_rect()
 
     @property
     def w(self):
@@ -33,11 +33,6 @@ class Image(object):
     @property
     def h(self):
         return self.rect.h
-
-    def set_dims(self):
-
-        rect = self.image.get_rect()
-        return rect
 
     def set_asset_path(self):
 
@@ -89,8 +84,8 @@ class Image(object):
 
 class GUIImage(Image):
 
-    def __init__(self, imagename):
-        Image.__init__(self, imagename)
+    def __init__(self, imagename, colorkey=None):
+        Image.__init__(self, imagename, colorkey=colorkey)
 
     def set_asset_path(self):
         return GUIPATH

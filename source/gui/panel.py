@@ -2,6 +2,7 @@ from ..entities.coord import Coord
 import pygame
 from ..constants import *
 from ..images.image import GUIImage
+from graphics.panel_image import PanelImage
 
 
 class Panel(object):
@@ -13,8 +14,8 @@ class Panel(object):
     """
 
     @classmethod
-    def base(cls, pos, w, h):
-        instance = cls(pos, w, h, 0)
+    def base(cls, pos, w, h, **kwargs):
+        instance = cls(pos, w, h, 0, **kwargs)
         return instance
 
     @classmethod
@@ -29,6 +30,11 @@ class Panel(object):
     # decorator methods - call on construction
     def parent(self):
         self.init_element_list()
+        return self
+
+    def panel_graphic(self):
+        p_image = PanelImage(self.w, self.h)
+        p_image.draw(self.image)
         return self
 
     def bind_layout(self, layout):
@@ -56,6 +62,8 @@ class Panel(object):
             self.needs_redraw = True
             self.color = self.set_color()
             self.image = self.set_basic_image()
+            if kwargs.get('basic_panel_graphic', True):
+                self.panel_graphic()
         else:
             self.needs_redraw = False
             self.color = None
@@ -80,9 +88,8 @@ class Panel(object):
         return RIVER_BLUE
 
     def set_basic_image(self):
-        image = pygame.Surface((self.w, self.h))
+        image = pygame.Surface((self.w, self.h)).convert()
         image.fill(self.color)
-        image = image.convert()
         return image
 
     def set_rect(self):

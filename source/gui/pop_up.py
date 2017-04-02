@@ -1,6 +1,6 @@
 import element
 from text_box import TextBox
-from box_border import BoxBorder
+from graphics.box_border import BoxBorder
 from ..controller.mouse import Mouse
 from ..controller.click_subscriber import ClickSubscriber
 from ..constants import scale, SCREENW, SCREENH

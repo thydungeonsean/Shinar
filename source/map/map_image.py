@@ -296,7 +296,7 @@ class DitherImageGenerator(object):
         img.fill(WHITE)
         img.set_colorkey(WHITE)
         x, y = DitherImageGenerator.dither_key[d_id] 
-        img.blit(self.dither_tileset.image, (0,0), (x, y, TILEW, TILEH))
+        img.blit(self.dither_tileset.image, (0, 0), (x, y, TILEW, TILEH))
         img = pygame.transform.rotate(img, ang_dict[pos])
         d_img.blit(img, img.get_rect())
 

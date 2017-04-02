@@ -2,7 +2,7 @@ from element import Element
 import pygame
 from ..constants import FERTILE_GREEN, scale, BLACK, WHITE
 from font import MenuFont
-from box_border import BoxBorder
+from graphics.box_border import BoxBorder
 from ..controller.mouse import Mouse
 
 

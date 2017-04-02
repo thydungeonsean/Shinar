@@ -36,21 +36,18 @@ def handle_input(phase):
             else:
                 phase.end_phase()
 
-
+shot = False
 while True:
 
     b.render()
     # b.battlefield.grid.draw(screen)
+
+    if not shot:
+        shot = True
+        pygame.image.save(screen, 's.png')
 
     b.run()
     b.handle_input()
 
     pygame.display.update()
     clock.tick(60)
-
-
-pygame.image.save(screen, 's.png')
-
-while pygame.event.wait().type != KEYDOWN:
-    clock.tick(60)
-

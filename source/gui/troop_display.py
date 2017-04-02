@@ -1,5 +1,5 @@
 from pop_up import PopUp
-from box_border import BoxBorder
+from graphics.box_border import BoxBorder
 from ..constants import *
 from ..images.image import GUIImage
 from font import MenuFont

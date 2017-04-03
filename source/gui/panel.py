@@ -3,6 +3,7 @@ import pygame
 from ..constants import *
 from ..images.image import GUIImage
 from graphics.panel_image import PanelImage
+from graphics.main_border import MainBorder
 
 
 class Panel(object):
@@ -35,6 +36,11 @@ class Panel(object):
     def panel_graphic(self):
         p_image = PanelImage(self.w, self.h)
         p_image.draw(self.image)
+        return self
+
+    def border_graphic(self, side):  # side is string: top, bot, left, right
+        b_image = MainBorder(self.w, self.h, side)
+        b_image.draw(self.image)
         return self
 
     def bind_layout(self, layout):

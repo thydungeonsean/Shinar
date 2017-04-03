@@ -12,6 +12,7 @@ from ..constants import *
 def dummy():
     pass
 
+
 class ScreenLayoutCollection(object):
 
     BATTLE_LAYOUT = ScreenLayout()
@@ -20,15 +21,17 @@ class ScreenLayoutCollection(object):
     def init_battle_layout(cls):
 
         # frame of battle view
-        top_frame = Panel.base((0, 0), 2 * BATTLEFIELD_FRAME_W + BATTLEFIELD_W, BATTLEFIELD_FRAME_W)
+        top_frame = Panel.base((0, 0), 2 * BATTLEFIELD_FRAME_W + BATTLEFIELD_W, BATTLEFIELD_FRAME_W,
+                               basic_panel_graphic=False).border_graphic('top')
 
-        left_frame = Panel.base((0, BATTLEFIELD_FRAME_W), BATTLEFIELD_FRAME_W, BATTLEFIELD_H)
+        left_frame = Panel.base((0, BATTLEFIELD_FRAME_W), BATTLEFIELD_FRAME_W, BATTLEFIELD_H,
+                                basic_panel_graphic=False).border_graphic('left')
 
         bot_frame = Panel.base((0, SCREENH - BATTLEFIELD_FRAME_W), 2 * BATTLEFIELD_FRAME_W +
-                               BATTLEFIELD_W, BATTLEFIELD_FRAME_W)
+                               BATTLEFIELD_W, BATTLEFIELD_FRAME_W, basic_panel_graphic=False).border_graphic('bot')
 
         right_frame = Panel.base((BATTLEFIELD_FRAME_W + BATTLEFIELD_W, BATTLEFIELD_FRAME_W),
-                                 BATTLEFIELD_FRAME_W, BATTLEFIELD_H)
+                                 BATTLEFIELD_FRAME_W, BATTLEFIELD_H, basic_panel_graphic=False).border_graphic('right')
 
         # right panel
 

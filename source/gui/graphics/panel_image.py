@@ -1,5 +1,5 @@
 import pygame
-from ...constants import scale, scale_tuple, PANEL_BROWN
+from ...constants import scale, scale_tuple, PANEL_BROWN, PANEL_DK_BROWN
 from ...images.image import GUIImage
 
 
@@ -20,11 +20,22 @@ class PanelImage(object):
         'r': scale_tuple((4, 2))
     }
 
-    def __init__(self, w, h):
+    style_mod = {
+        1: (0, 0),
+        2: scale_tuple((0, 6))
+    }
+
+    style_fill = {
+        1: PANEL_BROWN,
+        2: PANEL_DK_BROWN
+    }
+
+    def __init__(self, w, h, style=1):
         if w < PanelImage.min:
             w = PanelImage.min
         if h < PanelImage.min:
             h = PanelImage.min
+        self.style = style
         self.image = self.set_image(w, h)
 
     def draw(self, surface):
@@ -35,7 +46,7 @@ class PanelImage(object):
         panel_tile = GUIImage('panel')
 
         image = pygame.Surface((w, h)).convert()
-        image.fill(PANEL_BROWN)
+        image.fill(PanelImage.style_fill[self.style])
 
         # draw_edges
         if w - PanelImage.min != 0:
@@ -67,10 +78,10 @@ class PanelImage(object):
         return image
 
     def get_element(self, panel, key):
-
+        sx, sy = PanelImage.style_mod[self.style]
         i = pygame.Surface(PanelImage.element_dim).convert()
         x, y = PanelImage.element_pos[key]
-        i.blit(panel.image, (0, 0), (x, y, PanelImage.element_w, PanelImage.element_w))
+        i.blit(panel.image, (0, 0), (x+sx, y+sy, PanelImage.element_w, PanelImage.element_w))
 
         return i
 
